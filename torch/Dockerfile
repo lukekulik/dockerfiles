@@ -12,5 +12,8 @@ RUN apt-get install -y vim tmux
 # torch packages
 RUN luarocks install torchx
 
+# lua package
+RUN apt-get install -y lua
+
 # enviromnet
 ENV OMP_NUM_THREADS=2
