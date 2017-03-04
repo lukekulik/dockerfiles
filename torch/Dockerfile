@@ -7,13 +7,11 @@ RUN apt-get update
 RUN apt-get install -y wget unzip
 
 # util packages
-RUN apt-get install -y vim tmux
+RUN apt-get install -y vim tmux libmatio2
 
 # torch packages
 RUN luarocks install torchx
-
-# lua package
-RUN apt-get install -y lua
+RUN luarocks install matio
 
 # enviromnet
 ENV OMP_NUM_THREADS=2
