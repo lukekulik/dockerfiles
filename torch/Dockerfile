@@ -1,17 +1,24 @@
 FROM compute.nvidia.com/nvidia/torch
 
-#update
-RUN apt-get update
-
-# data packages
-RUN apt-get install -y wget unzip
-
-# util packages
-RUN apt-get install -y vim tmux libmatio2
+# ubuntu packages
+RUN apt-get update && apt-get install -y \
+  wget \ 
+  unzip \ 
+  vim \
+  tmux \
+  libmatio2 \
+  libopenblas-dev \
+  liblapack-dev \
+  cython  
+  
+# python packages
+RUN pip install h5py
 
 # torch packages
-RUN luarocks install torchx
+RUN luarocks install torchx 
 RUN luarocks install matio
+RUN luarocks install hdf5
+RUN luarocks install csvigo
 
 # enviromnet
 ENV OMP_NUM_THREADS=2
