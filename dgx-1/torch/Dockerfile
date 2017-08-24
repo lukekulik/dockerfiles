@@ -45,12 +45,12 @@ RUN luarocks install matio
 # RUN luarocks install csvigo
 # RUN luarocks install colormap
 
-# Cuda
-# RUN apt-get install --no-install-recommends -y cuda
-# RUN luarocks install FindCUDA
-# RUN luarocks install cutorch
-# RUN luarocks install cunn
-# RUN luarocks install cudnn
+# NCCL
+RUN git clone https://github.com/NVIDIA/nccl /root/nccl
+WORKDIR /root/nccl
+RUN make CUDA_HOME=/usr/local/cuda
+ENV LD_LIBRARY_PATH=/root/nccl/build/lib:$LD_LIBRARY_PATH
+RUN luarocks install nccl
 
 WORKDIR /workspace
 
