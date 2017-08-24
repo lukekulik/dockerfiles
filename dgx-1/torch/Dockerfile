@@ -46,11 +46,14 @@ RUN luarocks install matio
 # RUN luarocks install colormap
 
 # NCCL
-RUN git clone https://github.com/NVIDIA/nccl /root/nccl
+# RUN git clone https://github.com/NVIDIA/nccl /root/nccl
+RUN mkdir /root/nccl
 WORKDIR /root/nccl
-RUN make CUDA_HOME=/usr/local/cuda
-ENV LD_LIBRARY_PATH=/root/nccl/build/lib:$LD_LIBRARY_PATH
-RUN luarocks install nccl
+# RUN make CUDA_HOME=/usr/local/cuda
+# ENV LD_LIBRARY_PATH=/root/nccl/build/lib:$LD_LIBRARY_PATH
+RUN wget https://www.dropbox.com/s/cedx1g0wlkgyund/nccl-repo-ubuntu1404-2.0.4-ga_2.0.4-1_amd64.deb && \
+  dpkg -i nccl-repo-ubuntu1404-2.0.4-ga_2.0.4-1_amd64.deb
+# RUN luarocks install nccl
 
 WORKDIR /workspace
 
