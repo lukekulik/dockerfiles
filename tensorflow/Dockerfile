@@ -40,6 +40,7 @@ RUN pip --no-cache-dir install \
         bcolz \
         futures \
         torchvision \
+        tensorflow-gpu \
         && \
     python -m ipykernel.kernelspec
     
@@ -48,11 +49,6 @@ RUN pip --no-cache-dir install \
 # COPY _PIP_FILE_ /
 # RUN pip --no-cache-dir install /_PIP_FILE_
 # RUN rm -f /_PIP_FILE_
-
-# Install TensorFlow GPU version.
-RUN pip --no-cache-dir install \
-    http://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-0.0.0-cp27-none-linux_x86_64.whl
-# --- ~ DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
 
 # RUN ln -s /usr/bin/python3 /usr/bin/python#
 
