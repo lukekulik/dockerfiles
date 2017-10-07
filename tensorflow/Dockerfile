@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     python get-pip.py && \
+    python3 get-pip.py && \
     rm get-pip.py
     
 # Install PyTorch
@@ -28,6 +29,23 @@ RUN pip --no-cache-dir install \
     http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp27-cp27mu-manylinux1_x86_64.whl 
 
 RUN pip --no-cache-dir install \
+        ipykernel \
+        jupyter \
+        matplotlib \
+        numpy \
+        scipy \
+        sklearn \
+        pandas \
+        Pillow \
+        keras \
+        bcolz \
+        futures \
+        torchvision \
+        tensorflow-gpu \
+        && \
+    python -m ipykernel.kernelspec
+    
+RUN pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
         matplotlib \
