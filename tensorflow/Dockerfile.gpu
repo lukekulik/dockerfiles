@@ -32,6 +32,9 @@ RUN pip --no-cache-dir install \
         sklearn \
         pandas \
         Pillow \
+        keras \
+        bcolz \
+        futures
         && \
     python -m ipykernel.kernelspec
 
