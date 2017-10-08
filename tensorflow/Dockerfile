@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         pkg-config \
         python \
         python-dev \
-        python3.6-dev \
+        python3.5-dev \
         rsync \
         software-properties-common \
         unzip \
