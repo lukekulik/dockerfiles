@@ -6,6 +6,8 @@ MAINTAINER Craig Citro <craigcitro@google.com>
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         curl \
+        git \
+        vi \
         libfreetype6-dev \
         libpng12-dev \
         libzmq3-dev \
@@ -47,6 +49,8 @@ RUN pip --no-cache-dir install \
         tensorflow-gpu \
         h5py \
         awscli \
+        satpy \
+        h5netcdf \
         && \
     python -m ipykernel.kernelspec
     
@@ -66,6 +70,8 @@ RUN pip3 --no-cache-dir install \
         tensorflow-gpu \
         h5py \
         awscli \
+        satpy \
+        h5netcdf \
         && \
     python -m ipykernel.kernelspec
     
