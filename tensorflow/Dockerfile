@@ -46,6 +46,7 @@ RUN pip --no-cache-dir install \
         torchvision \
         tensorflow-gpu \
         h5py \
+        awscli \
         && \
     python -m ipykernel.kernelspec
     
@@ -64,6 +65,7 @@ RUN pip3 --no-cache-dir install \
         torchvision \
         tensorflow-gpu \
         h5py \
+        awscli \
         && \
     python -m ipykernel.kernelspec
     
