@@ -1,17 +1,20 @@
 FROM ubuntu:16.04
 
-MAINTAINER Craig Citro <craigcitro@google.com>
+AINTAINER Craig Citro <craigcitro@google.com>
 
 # Pick up some TF dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         curl \
+        git \
+        vi \
         libfreetype6-dev \
         libpng12-dev \
         libzmq3-dev \
         pkg-config \
         python \
         python-dev \
+        python3.5-dev \
         rsync \
         software-properties-common \
         unzip \
@@ -20,8 +23,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
+    python3 get-pip.py && \
     python get-pip.py && \
     rm get-pip.py
+    
+# Install PyTorch
+RUN pip --no-cache-dir install \
+    http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp27-cp27mu-manylinux1_x86_64.whl 
+RUN pip3 --no-cache-dir install \
+    http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp35-cp35m-manylinux1_x86_64.whl 
 
 RUN pip --no-cache-dir install \
         ipykernel \
@@ -32,19 +42,44 @@ RUN pip --no-cache-dir install \
         sklearn \
         pandas \
         Pillow \
+        keras \
+        bcolz \
+        futures \
+        torchvision \
+        tensorflow \
+        h5py \
+        awscli \
+        satpy \
+        h5netcdf \
         && \
     python -m ipykernel.kernelspec
-
+    
+RUN pip3 --no-cache-dir install \
+        ipykernel \
+        jupyter \
+        matplotlib \
+        numpy \
+        scipy \
+        sklearn \
+        pandas \
+        Pillow \
+        keras \
+        bcolz \
+        futures \
+        torchvision \
+        tensorflow \
+        h5py \
+        awscli \
+        satpy \
+        h5netcdf \
+        && \
+    python -m ipykernel.kernelspec
+    
 # --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
 # These lines will be edited automatically by parameterized_docker_build.sh. #
 # COPY _PIP_FILE_ /
 # RUN pip --no-cache-dir install /_PIP_FILE_
 # RUN rm -f /_PIP_FILE_
-
-# Install TensorFlow CPU version from central repo
-RUN pip --no-cache-dir install \
-    http://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.0.0-cp27-none-linux_x86_64.whl
-# --- ~ DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
 
 # RUN ln -s /usr/bin/python3 /usr/bin/python#
 
@@ -59,11 +94,12 @@ COPY notebooks /notebooks
 # We just add a little wrapper script.
 COPY run_jupyter.sh /
 
+# For CUDA profiling, TensorFlow requires CUPTI.
+ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
+
 # TensorBoard
 EXPOSE 6006
 # IPython
 EXPOSE 8888
 
-WORKDIR "/notebooks"
-
-CMD ["/run_jupyter.sh"]
+#WORKDIR "/notebooks"
