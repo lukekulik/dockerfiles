@@ -17,16 +17,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libpng12-dev \
         libzmq3-dev \
         pkg-config \
-        python2.7 \
-        python2.7-dev \
+        python \
+        python-dev \
         python3.6 \
         python3.6-dev \
         rsync \
-        software-properties-common \
         unzip \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+    
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
+RUN update-alternatives --config python3
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     python3 get-pip.py && \
@@ -37,7 +40,7 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 RUN pip --no-cache-dir install \
     http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp27-cp27mu-manylinux1_x86_64.whl 
 RUN pip3 --no-cache-dir install \
-    http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp35-cp35m-manylinux1_x86_64.whl 
+    http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp36-cp36m-manylinux1_x86_64.whl 
 
 RUN pip --no-cache-dir install \
         ipykernel \
