@@ -7,14 +7,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         curl \
         git \
-        vi \
+        vim \
         libfreetype6-dev \
         libpng12-dev \
         libzmq3-dev \
         pkg-config \
         python \
         python-dev \
-        python3.6 \
+        python3 \
         rsync \
         software-properties-common \
         unzip \
