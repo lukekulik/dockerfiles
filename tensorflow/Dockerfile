@@ -2,6 +2,8 @@ FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 
 MAINTAINER Craig Citro <craigcitro@google.com>
 
+sudo add-apt-repository ppa:fkrull/deadsnakes
+
 # Pick up some TF dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
@@ -14,7 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         pkg-config \
         python \
         python-dev \
-        python3 \
+        python3.6-dev \
         rsync \
         software-properties-common \
         unzip \
