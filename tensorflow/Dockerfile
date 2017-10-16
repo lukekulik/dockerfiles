@@ -72,6 +72,8 @@ RUN pip3 --no-cache-dir install \
         awscli \
         satpy \
         h5netcdf \
+        tqdm \
+        graphviz \
         && \
     python -m ipykernel.kernelspec
     
@@ -100,6 +102,6 @@ ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
 # TensorBoard
 EXPOSE 6006
 # IPython
-EXPOSE 8888
+EXPOSE 9999
 
 #WORKDIR "/notebooks"
