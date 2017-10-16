@@ -2,7 +2,7 @@ FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 
 MAINTAINER Craig Citro <craigcitro@google.com>
 
-sudo add-apt-repository ppa:fkrull/deadsnakes
+RUN add-apt-repository ppa:fkrull/deadsnakes
 
 # Pick up some TF dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
