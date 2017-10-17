@@ -83,7 +83,7 @@ RUN pip3 --no-cache-dir install \
         h5netcdf \
         tqdm \
         graphviz \
-        visdom
+        visdom \
         && \
     python3 -m ipykernel.kernelspec
     
