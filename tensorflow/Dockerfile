@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         gfortran\
         libv4l-dev\
         libjpeg8-dev \
-        libtiff4-dev \
+        libtiff5-dev \
         libjasper-dev \
         libpng12-dev \
         && \
