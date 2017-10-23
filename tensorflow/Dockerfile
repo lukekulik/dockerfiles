@@ -23,6 +23,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         python3.6-dev \
         rsync \
         unzip \
+        wget \
+        libavcodec-dev \
+        libavformat-dev \
+        libswscale-dev \
+        libgtk2.0-dev \
+        libatlas-base-dev \
+        gfortran\
+        libv4l-dev\
+        libjpeg8-dev \
+        libtiff4-dev \
+        libjasper-dev \
+        libpng12-dev
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -60,6 +72,7 @@ RUN pip --no-cache-dir install \
         awscli \
         satpy \
         h5netcdf \
+        opencv-python \
         && \
     python -m ipykernel.kernelspec
     
@@ -84,6 +97,7 @@ RUN pip3 --no-cache-dir install \
         tqdm \
         graphviz \
         visdom \
+        opencv-python \
         && \
     python3 -m ipykernel.kernelspec
     
