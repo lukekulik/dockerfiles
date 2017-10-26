@@ -35,7 +35,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libtiff5-dev \
         libjasper-dev \
         libpng12-dev \
-        jpeg-dev \
+        libjpeg-dev \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
