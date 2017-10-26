@@ -1,6 +1,6 @@
 FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 
-MAINTAINER Craig Citro <craigcitro@google.com>
+MAINTAINER Luke Kulik
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         software-properties-common
@@ -35,6 +35,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libtiff5-dev \
         libjasper-dev \
         libpng12-dev \
+        jpeg-dev \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -62,7 +63,7 @@ RUN pip --no-cache-dir install \
         scipy \
         sklearn \
         pandas \
-        Pillow \
+        pillow-simd \
         keras \
         bcolz \
         futures \
@@ -84,7 +85,7 @@ RUN pip3 --no-cache-dir install \
         scipy \
         sklearn \
         pandas \
-        Pillow \
+        pillow-simd \
         keras \
         bcolz \
         futures \
