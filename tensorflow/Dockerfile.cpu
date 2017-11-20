@@ -1,6 +1,11 @@
 FROM ubuntu:16.04
 
-MAINTAINER Craig Citro <craigcitro@google.com>
+MAINTAINER Luke Kulik
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        software-properties-common
+
+RUN add-apt-repository ppa:fkrull/deadsnakes
 
 # Pick up some TF dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -14,24 +19,41 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         pkg-config \
         python \
         python-dev \
-        python3.5-dev \
+        python3.6 \
+        python3.6-dev \
         rsync \
-        software-properties-common \
         unzip \
+        wget \
+        libavcodec-dev \
+        libavformat-dev \
+        libswscale-dev \
+        libgtk2.0-dev \
+        libatlas-base-dev \
+        gfortran\
+        libv4l-dev\
+        libjpeg8-dev \
+        libtiff5-dev \
+        libjasper-dev \
+        libpng12-dev \
+        libjpeg-dev \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
+RUN update-alternatives --config python3
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     python3 get-pip.py && \
     python get-pip.py && \
     rm get-pip.py
-    
+
 # Install PyTorch
 RUN pip --no-cache-dir install \
-    http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp27-cp27mu-manylinux1_x86_64.whl 
+    http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp27-cp27mu-manylinux1_x86_64.whl
 RUN pip3 --no-cache-dir install \
-    http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp35-cp35m-manylinux1_x86_64.whl 
+    http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp36-cp36m-manylinux1_x86_64.whl
 
 RUN pip --no-cache-dir install \
         ipykernel \
@@ -41,7 +63,7 @@ RUN pip --no-cache-dir install \
         scipy \
         sklearn \
         pandas \
-        Pillow \
+        pillow-simd \
         keras \
         bcolz \
         futures \
@@ -51,9 +73,10 @@ RUN pip --no-cache-dir install \
         awscli \
         satpy \
         h5netcdf \
+        opencv-python \
         && \
     python -m ipykernel.kernelspec
-    
+
 RUN pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
@@ -62,7 +85,7 @@ RUN pip3 --no-cache-dir install \
         scipy \
         sklearn \
         pandas \
-        Pillow \
+        pillow-simd \
         keras \
         bcolz \
         futures \
@@ -72,9 +95,13 @@ RUN pip3 --no-cache-dir install \
         awscli \
         satpy \
         h5netcdf \
+        tqdm \
+        graphviz \
+        visdom \
+        opencv-python \
         && \
-    python -m ipykernel.kernelspec
-    
+    python3 -m ipykernel.kernelspec
+
 # --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
 # These lines will be edited automatically by parameterized_docker_build.sh. #
 # COPY _PIP_FILE_ /
@@ -100,6 +127,6 @@ ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
 # TensorBoard
 EXPOSE 6006
 # IPython
-EXPOSE 8888
+EXPOSE 9999
 
 #WORKDIR "/notebooks"
