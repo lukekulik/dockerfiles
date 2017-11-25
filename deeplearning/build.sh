@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ $1 = "cpu" ]; then
-    docker build -t lkulik/deeplearning-cpu -f Dockerfile.cpu .
+    docker build -t lkulik/deeplearning-cpu -f Dockerfile .
 fi
 
 if [ $1 = "gpu" ]; then
