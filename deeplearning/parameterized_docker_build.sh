@@ -37,7 +37,7 @@
 #   TF_DOCKER_BUILD_IMAGE_NAME:
 #     (Optional)
 #     If set to any non-empty value, will use it as the image of the
-#     newly-built image. If not set, the tag prefix tensorflow/tensorflow
+#     newly-built image. If not set, the tag prefix deeplearning/deeplearning
 #     will be used.
 #
 #   TF_DOCKER_BUILD_VERSION:
@@ -263,7 +263,7 @@ fi
 
 # Perform docker build
 # Intermediate image name with tag
-IMG="${USER}/tensorflow:${FINAL_TAG}"
+IMG="${USER}/deeplearning:${FINAL_TAG}"
 echo "Building docker image with image name and tag: ${IMG}"
 
 "${DOCKER_BINARY}" build --no-cache --pull -t "${IMG}" -f "${DOCKERFILE}" "${TMP_DIR}"

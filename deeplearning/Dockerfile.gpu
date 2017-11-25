@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         rsync \
         unzip \
         wget \
+        tmux \
         libavcodec-dev \
         libavformat-dev \
         libswscale-dev \
@@ -36,6 +37,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libjasper-dev \
         libpng12-dev \
         libjpeg-dev \
+        libopenblas-dev \
+        liblapack-dev \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -127,6 +130,6 @@ ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
 # TensorBoard
 EXPOSE 6006
 # IPython
-EXPOSE 9999
+EXPOSE 8888
 
-#WORKDIR "/notebooks"
+WORKDIR "/workspace"

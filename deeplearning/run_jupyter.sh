@@ -15,4 +15,4 @@
 # ==============================================================================
 
 
-jupyter notebook --port 9999 --allow-root "$@" &
+jupyter notebook --port 8888 --allow-root "$@" &
