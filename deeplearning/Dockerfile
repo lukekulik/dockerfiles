@@ -7,7 +7,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN add-apt-repository ppa:fkrull/deadsnakes
 
-# Pick up some TF dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         curl \
@@ -39,10 +38,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libjpeg-dev \
         libopenblas-dev \
         liblapack-dev \
+        unrar \
+        cmake \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
+    
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
 RUN update-alternatives --config python3
@@ -77,6 +78,8 @@ RUN pip --no-cache-dir install \
         satpy \
         h5netcdf \
         opencv-python \
+        cython \
+        theano \
         && \
     python -m ipykernel.kernelspec
 
@@ -102,16 +105,18 @@ RUN pip3 --no-cache-dir install \
         graphviz \
         visdom \
         opencv-python \
+        cython \
+        theano \
         && \
     python3 -m ipykernel.kernelspec
-
+  
 # --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
 # These lines will be edited automatically by parameterized_docker_build.sh. #
 # COPY _PIP_FILE_ /
 # RUN pip --no-cache-dir install /_PIP_FILE_
 # RUN rm -f /_PIP_FILE_
 
-# RUN ln -s /usr/bin/python3 /usr/bin/python#
+RUN ln -s /usr/bin/python3 /usr/bin/python#
 
 # Set up our notebook config.
 COPY jupyter_notebook_config.py /root/.jupyter/
