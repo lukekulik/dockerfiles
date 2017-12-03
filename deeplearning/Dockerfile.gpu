@@ -7,7 +7,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN add-apt-repository ppa:fkrull/deadsnakes
 
-# Pick up some TF dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         curl \
@@ -39,6 +38,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libjpeg-dev \
         libopenblas-dev \
         liblapack-dev \
+        unrar \
+        cmake \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -52,11 +53,25 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     python get-pip.py && \
     rm get-pip.py
     
+# Clone libgpuarray repo and move into it
+RUN cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpuarray && \
+# Make and move into build directory
+  mkdir Build && cd Build && \
+# CMake
+  cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr && \
+# Make
+  make -j"$(nproc)" && \
+  make install
+# Install pygpu
+RUN cd /root/libgpuarray && \
+  python3 setup.py build_ext -L /usr/lib -I /usr/include && \
+  python3 setup.py install
+
 # Install PyTorch
 RUN pip --no-cache-dir install \
-    http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp27-cp27mu-manylinux1_x86_64.whl 
+    http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp27-cp27mu-manylinux1_x86_64.whl
 RUN pip3 --no-cache-dir install \
-    http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp36-cp36m-manylinux1_x86_64.whl 
+    http://download.pytorch.org/whl/cu80/torch-0.2.0.post3-cp36-cp36m-manylinux1_x86_64.whl
 
 RUN pip --no-cache-dir install \
         ipykernel \
@@ -71,15 +86,17 @@ RUN pip --no-cache-dir install \
         bcolz \
         futures \
         torchvision \
-        tensorflow-gpu \
+        tensorflow \
         h5py \
         awscli \
         satpy \
         h5netcdf \
         opencv-python \
+        cython \
+        theano \
         && \
     python -m ipykernel.kernelspec
-    
+
 RUN pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
@@ -93,7 +110,7 @@ RUN pip3 --no-cache-dir install \
         bcolz \
         futures \
         torchvision \
-        tensorflow-gpu \
+        tensorflow \
         h5py \
         awscli \
         satpy \
@@ -102,16 +119,18 @@ RUN pip3 --no-cache-dir install \
         graphviz \
         visdom \
         opencv-python \
+        cython \
+        theano \
         && \
     python3 -m ipykernel.kernelspec
-    
+  
 # --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
 # These lines will be edited automatically by parameterized_docker_build.sh. #
 # COPY _PIP_FILE_ /
 # RUN pip --no-cache-dir install /_PIP_FILE_
 # RUN rm -f /_PIP_FILE_
 
-# RUN ln -s /usr/bin/python3 /usr/bin/python#
+RUN ln -s /usr/bin/python3 /usr/bin/python#
 
 # Set up our notebook config.
 COPY jupyter_notebook_config.py /root/.jupyter/
@@ -126,6 +145,9 @@ COPY run_jupyter.sh /
 
 # For CUDA profiling, TensorFlow requires CUPTI.
 ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
+
+# Set up .theanorc for CUDA
+RUN echo "[global]\ndevice=cuda\nfloatX=float32\noptimizer_including=cudnn\n[lib]\ncnmem=0.1\n[nvcc]\nfastmath=True" > /root/.theanorc
 
 # TensorBoard
 EXPOSE 6006
