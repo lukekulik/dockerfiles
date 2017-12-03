@@ -52,20 +52,6 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     python3 get-pip.py && \
     python get-pip.py && \
     rm get-pip.py
-    
-# Clone libgpuarray repo and move into it
-RUN cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpuarray && \
-# Make and move into build directory
-  mkdir Build && cd Build && \
-# CMake
-  cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr && \
-# Make
-  make -j"$(nproc)" && \
-  make install
-# Install pygpu
-RUN cd /root/libgpuarray && \
-  python3 setup.py build_ext -L /usr/lib -I /usr/include && \
-  python3 setup.py install
 
 # Install PyTorch
 RUN pip --no-cache-dir install \
@@ -123,6 +109,20 @@ RUN pip3 --no-cache-dir install \
         theano \
         && \
     python3 -m ipykernel.kernelspec
+    
+# Clone libgpuarray repo and move into it
+RUN cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpuarray && \
+# Make and move into build directory
+  mkdir Build && cd Build && \
+# CMake
+  cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr && \
+# Make
+  make -j"$(nproc)" && \
+  make install
+# Install pygpu
+RUN cd /root/libgpuarray && \
+  python3 setup.py build_ext -L /usr/lib -I /usr/include && \
+  python3 setup.py install
   
 # --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
 # These lines will be edited automatically by parameterized_docker_build.sh. #
