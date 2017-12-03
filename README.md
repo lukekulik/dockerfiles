@@ -1,6 +1,8 @@
 # dockerfiles
 dockerfiles for [Docker](https://www.docker.com/), a software container platform.
 
+[![Build Status](https://travis-ci.org/lukekulik/dockerfiles.svg?branch=master)](https://travis-ci.org/lukekulik/dockerfiles)
+
 ## Installation
 Assume that [nvidia-docker](https://github.com/NVIDIA/nvidia-docker) has been installed and that this repo is located under the home folder `~/dockerfiles/`.
 
