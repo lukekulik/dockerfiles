@@ -83,7 +83,7 @@ RUN pip --no-cache-dir install \
         opencv-python \
         cython \
         theano \
-        hdf5 \
+        netCDF4 \
         && \
     python -m ipykernel.kernelspec
 
@@ -111,7 +111,7 @@ RUN pip3 --no-cache-dir install \
         opencv-python \
         cython \
         theano \
-        hdf5 \
+        netCDF4 \
         && \
     python3 -m ipykernel.kernelspec
     
