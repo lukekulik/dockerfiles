@@ -40,6 +40,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         liblapack-dev \
         unrar \
         cmake \
+        libhdf5-serial-dev \
+        netcdf-bin \
+        libnetcdf-dev \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -80,6 +83,7 @@ RUN pip --no-cache-dir install \
         opencv-python \
         cython \
         theano \
+        hdf5 \
         && \
     python -m ipykernel.kernelspec
 
@@ -107,6 +111,7 @@ RUN pip3 --no-cache-dir install \
         opencv-python \
         cython \
         theano \
+        hdf5 \
         && \
     python3 -m ipykernel.kernelspec
   
