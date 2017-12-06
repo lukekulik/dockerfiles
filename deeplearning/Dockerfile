@@ -81,7 +81,7 @@ RUN pip --no-cache-dir install \
         satpy \
         h5netcdf \
         opencv-python \
-        cython \
+        Cython \
         theano \
         netCDF4 \
         && \
@@ -109,7 +109,7 @@ RUN pip3 --no-cache-dir install \
         graphviz \
         visdom \
         opencv-python \
-        cython \
+        Cython \
         theano \
         netCDF4 \
         && \
