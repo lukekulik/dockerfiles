@@ -38,7 +38,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libjpeg-dev \
         libopenblas-dev \
         liblapack-dev \
-        unrar \
+        unrar-free \
         cmake \
         libhdf5-serial-dev \
         netcdf-bin \
