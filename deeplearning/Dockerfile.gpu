@@ -71,7 +71,6 @@ RUN pip --no-cache-dir install \
         keras \
         bcolz \
         futures \
-        torchvision \
         tensorflow-gpu \
         h5py \
         awscli \
@@ -82,6 +81,7 @@ RUN pip --no-cache-dir install \
         theano \
         netCDF4 \
         http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp27-cp27mu-linux_x86_64.whl \
+        torchvision \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         && \
     python -m ipykernel.kernelspec
@@ -98,7 +98,6 @@ RUN pip3 --no-cache-dir install \
         keras \
         bcolz \
         futures \
-        torchvision \
         tensorflow-gpu \
         h5py \
         awscli \
@@ -112,6 +111,7 @@ RUN pip3 --no-cache-dir install \
         theano \
         netCDF4 \
         http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp27-cp27mu-linux_x86_64.whl \
+        torchvision \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         && \
     python3 -m ipykernel.kernelspec
