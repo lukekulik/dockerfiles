@@ -129,9 +129,6 @@ RUN cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpu
 RUN cd /root/libgpuarray && \
   python3 setup.py build_ext -L /usr/lib -I /usr/include && \
   python3 setup.py install
-  
-# Make Python3 the default Python
-RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Set up our notebook config.
 COPY jupyter_notebook_config.py /root/.jupyter/
