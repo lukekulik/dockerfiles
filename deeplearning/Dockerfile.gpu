@@ -12,24 +12,26 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         git \
         vim \
-        libfreetype6-dev \
-        libpng12-dev \
-        libzmq3-dev \
         pkg-config \
-        python \
-        python-dev \
-        python3.6 \
-        python3.6-dev \
         rsync \
         unzip \
         wget \
         tmux \
+        unrar \
+        cmake \
+        gfortran\
+        python \
+        python-dev \
+        python3.6 \
+        python3.6-dev \
+        libfreetype6-dev \
+        libpng12-dev \
+        libzmq3-dev \
         libavcodec-dev \
         libavformat-dev \
         libswscale-dev \
         libgtk2.0-dev \
         libatlas-base-dev \
-        gfortran\
         libv4l-dev\
         libjpeg8-dev \
         libtiff5-dev \
@@ -38,8 +40,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libjpeg-dev \
         libopenblas-dev \
         liblapack-dev \
-        unrar \
-        cmake \
         libhdf5-serial-dev \
         netcdf-bin \
         libnetcdf-dev \
@@ -130,14 +130,8 @@ RUN cd /root/libgpuarray && \
   python3 setup.py build_ext -L /usr/lib -I /usr/include && \
   python3 setup.py install
   
-
-# --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
-# These lines will be edited automatically by parameterized_docker_build.sh. #
-# COPY _PIP_FILE_ /
-# RUN pip --no-cache-dir install /_PIP_FILE_
-# RUN rm -f /_PIP_FILE_
-
-RUN ln -s /usr/bin/python3 /usr/bin/python#
+# Make Python3 the default Python
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Set up our notebook config.
 COPY jupyter_notebook_config.py /root/.jupyter/
