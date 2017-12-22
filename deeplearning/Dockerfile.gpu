@@ -58,13 +58,7 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     python3 get-pip.py && \
     python get-pip.py && \
     rm get-pip.py
-
-# Install PyTorch
-RUN pip --no-cache-dir install \
-    http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp27-cp27mu-linux_x86_64.whl 
-RUN pip3 --no-cache-dir install \
-    http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp36-cp36m-linux_x86_64.whl
-
+    
 RUN pip --no-cache-dir install \
         ipykernel \
         jupyter \
@@ -87,6 +81,8 @@ RUN pip --no-cache-dir install \
         Cython \
         theano \
         netCDF4 \
+        http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp27-cp27mu-linux_x86_64.whl \
+        http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         && \
     python -m ipykernel.kernelspec
 
@@ -115,6 +111,8 @@ RUN pip3 --no-cache-dir install \
         Cython \
         theano \
         netCDF4 \
+        http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp27-cp27mu-linux_x86_64.whl \
+        http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         && \
     python3 -m ipykernel.kernelspec
     
@@ -132,12 +130,7 @@ RUN cd /root/libgpuarray && \
   python3 setup.py build_ext -L /usr/lib -I /usr/include && \
   python3 setup.py install
   
-# Install mpl_toolkits.basemap
-RUN cd /root && wget wget https://github.com/matplotlib/basemap/archive/v1.1.0.tar.gz && tar xvf v1.1.0.tar.gz && \
-  cd basemap-1.1.0/ && \
-  python3 setup.py install
-  python setup.py install
-  
+
 # --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
 # These lines will be edited automatically by parameterized_docker_build.sh. #
 # COPY _PIP_FILE_ /
