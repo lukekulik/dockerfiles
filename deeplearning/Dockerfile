@@ -84,6 +84,7 @@ RUN pip --no-cache-dir install \
         Cython \
         theano \
         netCDF4 \
+        scikit-image \
         && \
     python -m ipykernel.kernelspec
 
@@ -112,6 +113,7 @@ RUN pip3 --no-cache-dir install \
         Cython \
         theano \
         netCDF4 \
+        scikit-image \
         && \
     python3 -m ipykernel.kernelspec
   
