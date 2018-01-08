@@ -5,7 +5,7 @@ MAINTAINER Luke Kulik
 RUN apt-get update && apt-get install -y --no-install-recommends \
         software-properties-common
 
-RUN add-apt-repository ppa:fkrull/deadsnakes
+RUN add-apt-repository ppa:deadsnakes/ppa
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
