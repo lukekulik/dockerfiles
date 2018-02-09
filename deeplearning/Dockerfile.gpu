@@ -46,6 +46,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libgeos-3.5.0 \
         libgeos-c1v5 \
         libgeos-dev \
+        ffmpeg \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
