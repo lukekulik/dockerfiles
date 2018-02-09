@@ -43,6 +43,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libhdf5-serial-dev \
         netcdf-bin \
         libnetcdf-dev \
+        ffmpeg \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
