@@ -66,6 +66,7 @@ RUN pip3 --no-cache-dir install \
 RUN pip --no-cache-dir install \
         ipykernel \
         jupyter \
+        jupyterlab \
         matplotlib \
         numpy \
         scipy \
@@ -92,6 +93,7 @@ RUN pip --no-cache-dir install \
 RUN pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
+        jupyterlab \
         matplotlib \
         numpy \
         scipy \
