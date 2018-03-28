@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         software-properties-common
 
 RUN add-apt-repository ppa:deadsnakes/ppa
+RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
@@ -44,6 +45,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         netcdf-bin \
         libnetcdf-dev \
         ffmpeg \
+        gdal-bin \
+        python-gdal \
+        python3-gdal \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -87,6 +91,7 @@ RUN pip --no-cache-dir install \
         theano \
         netCDF4 \
         scikit-image \
+        gdal \
         && \
     python -m ipykernel.kernelspec
 
@@ -117,6 +122,7 @@ RUN pip3 --no-cache-dir install \
         theano \
         netCDF4 \
         scikit-image \
+        gdal \
         && \
     python3 -m ipykernel.kernelspec
   
