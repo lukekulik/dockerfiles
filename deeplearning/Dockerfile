@@ -91,6 +91,7 @@ RUN pip3 --no-cache-dir install \
         netCDF4 \
         scikit-image \
         keras \
+        http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         && \
     python3 -m ipykernel.kernelspec
     
