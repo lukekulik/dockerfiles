@@ -81,7 +81,6 @@ RUN pip3 --no-cache-dir install \
         tensorflow \
         h5py \
         awscli \
-        satpy \
         h5netcdf \
         tqdm \
         opencv-python \
@@ -93,6 +92,8 @@ RUN pip3 --no-cache-dir install \
         && \
     python3 -m ipykernel.kernelspec
   
+#  satpy 
+# 
 # --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
 # These lines will be edited automatically by parameterized_docker_build.sh. #
 # COPY _PIP_FILE_ /
