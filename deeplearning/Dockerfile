@@ -63,7 +63,7 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 RUN pip3 --no-cache-dir install \
     http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp36-cp36m-linux_x86_64.whl
 
-RUN pip3 --no-cache-dir install --upgrade --force-reinstall \
+RUN pip3 --no-cache-dir install \
         numpy \
         scipy \
         ipykernel \
