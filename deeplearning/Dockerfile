@@ -91,7 +91,6 @@ RUN pip --no-cache-dir install \
         theano \
         netCDF4 \
         scikit-image \
-        gdal \
         && \
     python -m ipykernel.kernelspec
 
@@ -122,7 +121,6 @@ RUN pip3 --no-cache-dir install \
         theano \
         netCDF4 \
         scikit-image \
-        gdal \
         && \
     python3 -m ipykernel.kernelspec
   
