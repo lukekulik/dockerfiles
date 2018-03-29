@@ -64,11 +64,10 @@ RUN pip3 --no-cache-dir install \
     http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp36-cp36m-linux_x86_64.whl
 
 # Install Tensorflow
-RUN pip3 install --upgrade \
-    https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.6.0-cp36-cp36m-linux_x86_64.whl
+# RUN pip3 install --upgrade \
+#     https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.6.0-cp36-cp36m-linux_x86_64.whl
 
-
-RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
+RUN pip3 --no-cache-dir install \
         numpy \
         scipy \
         ipykernel \
@@ -92,11 +91,15 @@ RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/us
         netCDF4 \
         scikit-image \
         keras \
+        && \
+    python3 -m ipykernel.kernelspec
+    
+# Install GDAL 2.2
+RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
         gdal \
         && \
     python3 -m ipykernel.kernelspec
-  
-#  satpy 
+
 # 
 # --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
 # These lines will be edited automatically by parameterized_docker_build.sh. #
