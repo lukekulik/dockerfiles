@@ -45,7 +45,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         netcdf-bin \
         libnetcdf-dev \
         ffmpeg \
-        gdal-bin \
+        libgdal-dev \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
