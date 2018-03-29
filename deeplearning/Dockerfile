@@ -62,37 +62,8 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
     rm get-pip.py
 
 # Install PyTorch
-RUN pip --no-cache-dir install \
-    http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp27-cp27mu-linux_x86_64.whl 
 RUN pip3 --no-cache-dir install \
     http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp36-cp36m-linux_x86_64.whl
-
-RUN pip --no-cache-dir install \
-        ipykernel \
-        jupyter \
-        jupyterlab \
-        matplotlib \
-        numpy \
-        scipy \
-        sklearn \
-        pandas \
-        pillow-simd \
-        keras \
-        bcolz \
-        futures \
-        torchvision \
-        tensorflow \
-        h5py \
-        awscli \
-        satpy \
-        h5netcdf \
-        opencv-python \
-        Cython \
-        theano \
-        netCDF4 \
-        scikit-image \
-        && \
-    python -m ipykernel.kernelspec
 
 RUN pip3 --no-cache-dir install \
         ipykernel \
