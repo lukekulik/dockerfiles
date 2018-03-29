@@ -66,16 +66,15 @@ RUN pip3 --no-cache-dir install \
     http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp36-cp36m-linux_x86_64.whl
 
 RUN pip3 --no-cache-dir install \
+        numpy \
+        scipy \
         ipykernel \
         jupyter \
         jupyterlab \
         matplotlib \
-        numpy \
-        scipy \
         sklearn \
         pandas \
         pillow-simd \
-        keras \
         bcolz \
         futures \
         torchvision \
@@ -85,13 +84,12 @@ RUN pip3 --no-cache-dir install \
         satpy \
         h5netcdf \
         tqdm \
-        graphviz \
-        visdom \
         opencv-python \
         Cython \
         theano \
         netCDF4 \
         scikit-image \
+        keras \
         && \
     python3 -m ipykernel.kernelspec
   
