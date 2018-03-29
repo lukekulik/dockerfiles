@@ -46,8 +46,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libnetcdf-dev \
         ffmpeg \
         gdal-bin \
-        python-gdal \
-        python3-gdal \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
