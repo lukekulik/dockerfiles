@@ -92,7 +92,7 @@ RUN pip3 --no-cache-dir install \
         scikit-image \
         keras \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
-        spacy \
+        spacy==1.9.0 \
         chainer \
         pytest \
         && \
