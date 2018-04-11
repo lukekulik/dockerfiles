@@ -10,6 +10,7 @@ RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
+        g++ \
         curl \
         git \
         vim \
