@@ -95,8 +95,8 @@ RUN pip --no-cache-dir install \
         pytest \
         gensim \
         pyxDamerauLevenshtein \
-        pymc3==3.2
-        seaborn
+        pymc3==3.2 \
+        seaborn \
         && \
     python -m ipykernel.kernelspec
 
@@ -133,8 +133,8 @@ RUN pip3 --no-cache-dir install \
         pytest \
         gensim \
         pyxDamerauLevenshtein \
-        pymc3==3.2
-        seaborn
+        pymc3==3.2 \
+        seaborn \
         && \
     python3 -m ipykernel.kernelspec
     
