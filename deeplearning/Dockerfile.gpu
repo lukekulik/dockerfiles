@@ -90,6 +90,13 @@ RUN pip --no-cache-dir install \
         http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp27-cp27mu-linux_x86_64.whl \
         torchvision \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
+        spacy==1.10.1 \
+        chainer \
+        pytest \
+        gensim \
+        pyxDamerauLevenshtein \
+        pymc3==3.2
+        seaborn
         && \
     python -m ipykernel.kernelspec
 
@@ -126,6 +133,8 @@ RUN pip3 --no-cache-dir install \
         pytest \
         gensim \
         pyxDamerauLevenshtein \
+        pymc3==3.2
+        seaborn
         && \
     python3 -m ipykernel.kernelspec
     
