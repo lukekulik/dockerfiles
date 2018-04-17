@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         unzip \
         wget \
         tmux \
+        htop \
         unrar \
         cmake \
         gfortran\
@@ -48,6 +49,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libgeos-dev \
         ffmpeg \
         sshfs \
+        libgdal-dev \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -105,13 +107,11 @@ RUN pip3 --no-cache-dir install \
         bcolz \
         futures \
         tensorflow-gpu==1.4.0 \
-        h5py \
+        h5py==2.8.0rc1 \
         awscli \
         satpy \
         h5netcdf \
         tqdm \
-        graphviz \
-        visdom \
         opencv-python \
         Cython \
         theano \
@@ -121,6 +121,11 @@ RUN pip3 --no-cache-dir install \
         http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp36-cp36m-linux_x86_64.whl \
         torchvision \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
+        spacy==1.10.1 \
+        chainer \
+        pytest \
+        gensim \
+        pyxDamerauLevenshtein \
         && \
     python3 -m ipykernel.kernelspec
     
