@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         unzip \
         wget \
         tmux \
+        htop \
         libavcodec-dev \
         libavformat-dev \
         libswscale-dev \
