@@ -51,7 +51,7 @@ RUN pip --no-cache-dir install \
         sklearn \
         pandas \
         spacy==1.10.1 \ 
-        chainer == 1.7.2 \
+        chainer==1.7.2 \
         && \
     python -m spacy download en
    # python -m ipykernel.kernelspec
