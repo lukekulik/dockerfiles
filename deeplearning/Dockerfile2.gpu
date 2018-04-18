@@ -45,8 +45,8 @@ RUN pip --no-cache-dir install \
         numpy \
         scipy \
         sklearn \
-        pandas 
- #       && \
+        pandas \
+        && 
 #    python -m ipykernel.kernelspec
 
 
