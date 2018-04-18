@@ -46,8 +46,10 @@ RUN pip --no-cache-dir install \
         scipy \
         sklearn \
         pandas \
-        && 
-#    python -m ipykernel.kernelspec
+        spacy==1.10.1 \ 
+        && \
+    python -m spacy download en
+   # python -m ipykernel.kernelspec
 
 
 # Set up our notebook config.
