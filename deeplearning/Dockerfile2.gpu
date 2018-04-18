@@ -51,7 +51,7 @@ RUN pip --no-cache-dir install \
 
 
 # Set up our notebook config.
-COPY jupyter_notebook_config.py /root/.jupyter/
+# COPY jupyter_notebook_config.py /root/.jupyter/
 
 # Copy sample notebooks.
 COPY notebooks /notebooks
