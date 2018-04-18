@@ -40,8 +40,8 @@ python get-pip.py && \
 rm get-pip.py
     
 RUN pip --no-cache-dir install \
-        ipykernel \
-        jupyter \
+      #  ipykernel \
+      #  jupyter \
         numpy \
         scipy \
         sklearn \
