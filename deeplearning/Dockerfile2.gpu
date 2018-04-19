@@ -24,9 +24,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libfreetype6-dev \
         libpng12-dev \
         libzmq3-dev \
-        libblas-dev \
+        libopenblas-dev \
         liblapack-dev \
-        libatlas-base-dev \
         gfortran \
         pkg-config \
         python-dev \
