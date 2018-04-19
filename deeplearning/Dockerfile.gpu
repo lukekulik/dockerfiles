@@ -73,6 +73,7 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 RUN pip --no-cache-dir install \
         ipykernel \
         jupyter \
+        cupy \
         jupyterlab \
         matplotlib \
         numpy \
@@ -110,6 +111,7 @@ RUN pip --no-cache-dir install \
 RUN pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
+        cupy \
         jupyterlab \
         matplotlib \
         numpy \
