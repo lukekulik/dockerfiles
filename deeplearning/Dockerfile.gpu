@@ -1,4 +1,4 @@
-FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
+FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 
 MAINTAINER Luke Kulik
 
@@ -7,24 +7,35 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN add-apt-repository ppa:deadsnakes/ppa
 
+# Essential Linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
-        curl \
-        git \
-        vim \
         pkg-config \
+        vim \
         rsync \
-        unzip \
-        wget \
         tmux \
         htop \
+        unzip \
         unrar \
+        curl \
+        wget \
+        git \
+        sshfs \
+
+# "Compilers"
+RUN apt-get update && apt-get install -y --no-install-recommends \  
         cmake \
         gfortran\
+        g++ \
         python \
         python-dev \
         python3.6 \
         python3.6-dev \
+        
+# "Not classified"
+RUN apt-get update && apt-get install -y --no-install-recommends \  
+        libopenblas-dev \
+        liblapack-dev \
         libfreetype6-dev \
         libpng12-dev \
         libzmq3-dev \
@@ -32,15 +43,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libavformat-dev \
         libswscale-dev \
         libgtk2.0-dev \
-        libatlas-base-dev \
         libv4l-dev\
         libjpeg8-dev \
         libtiff5-dev \
         libjasper-dev \
         libpng12-dev \
         libjpeg-dev \
-        libopenblas-dev \
-        liblapack-dev \
         libhdf5-serial-dev \
         netcdf-bin \
         libnetcdf-dev \
@@ -48,14 +56,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libgeos-c1v5 \
         libgeos-dev \
         ffmpeg \
-        sshfs \
         libgdal-dev \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
     
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1 # ?
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2 # ?
 RUN update-alternatives --config python3
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
@@ -72,7 +79,7 @@ RUN pip --no-cache-dir install \
         scipy \
         sklearn \
         pandas \
-        pillow-simd \
+        pillow-simd \ # need to test performance
         keras \
         bcolz \
         futures \
@@ -86,9 +93,9 @@ RUN pip --no-cache-dir install \
         theano \
         netCDF4 \
         scikit-image \
-      #  tensorboardX \
-      #  torch \
-      #  torchvision \
+        tensorboardX \
+        torch \
+        torchvision \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         spacy==1.10.1 \
         chainer \
@@ -124,9 +131,9 @@ RUN pip3 --no-cache-dir install \
         theano \
         netCDF4 \
         scikit-image \
-    #    tensorboardX \
-   #     torch \
-   #     torchvision \
+        tensorboardX \
+        torch \
+        torchvision \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         spacy==1.10.1 \
         chainer \
