@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         wget \
         git \
-        sshfs \
+        sshfs
 
 # "Compilers"
 RUN apt-get update && apt-get install -y --no-install-recommends \  
@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         python \
         python-dev \
         python3.6 \
-        python3.6-dev \
+        python3.6-dev
         
 # "Not classified"
 RUN apt-get update && apt-get install -y --no-install-recommends \  
