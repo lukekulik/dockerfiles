@@ -43,8 +43,8 @@ rm get-pip.py
 RUN pip --no-cache-dir install pyopenssl ndg-httpsclient pyasn1
     
 RUN pip --no-cache-dir install \
-        ipykernel \
-        jupyter \
+        #ipykernel \
+        #jupyter \
         numpy \
         scipy \
         sklearn \
