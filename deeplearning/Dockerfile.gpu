@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN add-apt-repository ppa:deadsnakes/ppa
 
 # Essential Linux utilities
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
         build-essential \
         pkg-config \
         vim \
@@ -20,10 +20,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         wget \
         git \
+        watch \
         sshfs
 
 # "Compilers"
-RUN apt-get update && apt-get install -y --no-install-recommends \  
+RUN apt-get install -y --no-install-recommends \  
         cmake \
         gfortran\
         g++ \
@@ -32,10 +33,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         python3.6 \
         python3.6-dev
         
-# "Not classified"
-RUN apt-get update && apt-get install -y --no-install-recommends \  
+# Linear Algebra accelerators 
+RUN apt-get install -y --no-install-recommends \  
         libopenblas-dev \
-        liblapack-dev \
+        liblapack-dev
+        
+RUN apt-get install -y --no-install-recommends \  
+        ffmpeg \
         libfreetype6-dev \
         libpng12-dev \
         libzmq3-dev \
@@ -48,14 +52,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libtiff5-dev \
         libjasper-dev \
         libpng12-dev \
-        libjpeg-dev \
+        libjpeg-dev \ # use SIMD-enabled package
         libhdf5-serial-dev \
         netcdf-bin \
         libnetcdf-dev \
         libgeos-3.5.0 \
         libgeos-c1v5 \
         libgeos-dev \
-        ffmpeg \
         libgdal-dev \
         && \
     apt-get clean && \
@@ -81,30 +84,22 @@ RUN pip --no-cache-dir install \
         sklearn \
         pandas \
         pillow-simd \
-        keras \
         bcolz \
         futures \
+        torch \
+        torchvision \
         tensorflow-gpu==1.4.0 \
+        keras \
+        theano \
         h5py \
         awscli \
-        satpy \
         h5netcdf \
         opencv-python \
         Cython \
-        theano \
         netCDF4 \
         scikit-image \
         tensorboardX \
-        torch \
-        torchvision \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
-        spacy==1.10.1 \
-        chainer \
-        pytest \
-        gensim \
-        pyxDamerauLevenshtein \
-        pymc3==3.2 \
-        seaborn \
         && \
     python -m ipykernel.kernelspec
 
@@ -119,31 +114,22 @@ RUN pip3 --no-cache-dir install \
         sklearn \
         pandas \
         pillow-simd \
-        keras \
         bcolz \
         futures \
+        torch \
+        torchvision \
         tensorflow-gpu==1.4.0 \
-        h5py==2.8.0rc1 \
+        keras \
+        theano \
+        h5py \
         awscli \
-        satpy \
         h5netcdf \
-        tqdm \
         opencv-python \
         Cython \
-        theano \
         netCDF4 \
         scikit-image \
         tensorboardX \
-        torch \
-        torchvision \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
-        spacy==1.10.1 \
-        chainer \
-        pytest \
-        gensim \
-        pyxDamerauLevenshtein \
-        pymc3==3.2 \
-        seaborn \
         && \
     python3 -m ipykernel.kernelspec
     
