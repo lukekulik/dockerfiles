@@ -52,7 +52,7 @@ RUN apt-get install -y --no-install-recommends \
         libtiff5-dev \
         libjasper-dev \
         libpng12-dev \
-        libjpeg-dev \ # use SIMD-enabled package
+        libjpeg-dev \ 
         libhdf5-serial-dev \
         netcdf-bin \
         libnetcdf-dev \
