@@ -100,6 +100,7 @@ RUN pip --no-cache-dir install \
         scikit-image \
         tensorboardX \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
+        seashells \
         && \
     python -m ipykernel.kernelspec
 
@@ -130,6 +131,7 @@ RUN pip3 --no-cache-dir install \
         scikit-image \
         tensorboardX \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
+        seashells \
         && \
     python3 -m ipykernel.kernelspec
     
