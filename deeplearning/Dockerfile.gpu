@@ -1,4 +1,4 @@
-FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu16.04
 
 MAINTAINER Luke Kulik
 
@@ -37,9 +37,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \  
         libopenblas-dev \
         liblapack-dev
-        
+
+# Data processors
 RUN apt-get update && apt-get install -y --no-install-recommends \  
-        ffmpeg \
+        ffmpeg-devel \
+        libgdal-dev \ 
+        libnetcdf-dev \
+        libhdf5-dev \
         libfreetype6-dev \
         libpng12-dev \
         libzmq3-dev \
@@ -53,13 +57,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libjasper-dev \
         libpng12-dev \
         libjpeg-dev \ 
-        libhdf5-serial-dev \
-        netcdf-bin \
-        libnetcdf-dev \
-        libgeos-3.5.0 \
-        libgeos-c1v5 \
-        libgeos-dev \
-        libgdal-dev \
         && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -103,7 +100,7 @@ RUN pip --no-cache-dir install \
         seashells \
         && \
     python -m ipykernel.kernelspec
-
+    
 RUN pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
@@ -132,6 +129,12 @@ RUN pip3 --no-cache-dir install \
         tensorboardX \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         seashells \
+        && \
+    python3 -m ipykernel.kernelspec
+
+# Install GDAL 2.2
+RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
+        gdal \
         && \
     python3 -m ipykernel.kernelspec
     
@@ -170,5 +173,7 @@ RUN echo "[global]\ndevice=cuda\nfloatX=float32\noptimizer_including=cudnn\n[lib
 EXPOSE 6006
 # IPython
 EXPOSE 8888
+
+# start jupyter automaticall here?
 
 WORKDIR "/workspace"
