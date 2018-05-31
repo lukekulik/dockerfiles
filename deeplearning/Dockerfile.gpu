@@ -7,6 +7,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN add-apt-repository ppa:deadsnakes/ppa
 
+# "Compilers"
+RUN apt-get update && apt-get install -y --no-install-recommends \  
+        cmake \
+        gfortran\
+        g++ \
+        python \
+        python-dev \
+        python3.6 \
+        python3.6-dev
+        
+# Linear Algebra accelerators 
+RUN apt-get update && apt-get install -y --no-install-recommends \  
+        libopenblas-dev \
+        liblapack-dev
+        
 # Essential Linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
@@ -22,22 +37,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         git \
         watch \
         sshfs
-
-# "Compilers"
-RUN apt-get update && apt-get install -y --no-install-recommends \  
-        cmake \
-        gfortran\
-        g++ \
-        python \
-        python-dev \
-        python3.6 \
-        python3.6-dev
         
-# Linear Algebra accelerators 
-RUN apt-get update && apt-get install -y --no-install-recommends \  
-        libopenblas-dev \
-        liblapack-dev
-
 # Data processors
 RUN apt-get update && apt-get install -y --no-install-recommends \  
         ffmpeg-devel \
@@ -73,7 +73,6 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 RUN pip --no-cache-dir install \
         ipykernel \
         jupyter \
-        cupy \
         jupyterlab \
         matplotlib \
         numpy \
@@ -104,7 +103,6 @@ RUN pip --no-cache-dir install \
 RUN pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
-        cupy \
         jupyterlab \
         matplotlib \
         numpy \
