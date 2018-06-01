@@ -1,1 +1,0 @@
-Note: Docker files under `/dockerfiles/dgx-1` are images optimzed for [NVIDIA DGX-1](https://www.nvidia.com/en-us/data-center/dgx-1/) and requires an NVIDIA DGX Cloud Services account to access the DGX™ Container Registry. See [Installing Docker and NVIDIA Docker](http://docs.nvidia.com/deeplearning/dgx/quick-start-guide/index.html#installdocker) for details.
