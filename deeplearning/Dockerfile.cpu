@@ -146,7 +146,7 @@ RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/us
 # Install OpenCV
 RUN git clone --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
 	cd /root/opencv && \
-	git checkout tags/3.4.1 -b install_branch
+	git checkout tags/3.4.1 -b install_branch && \
 	mkdir build && \
 	cd build && \
 	cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DWITH_CUDA=OFF -DENABLE_FAST_MATH=1 \
