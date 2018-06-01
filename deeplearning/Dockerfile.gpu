@@ -34,7 +34,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         python \
         python-dev \
         python3.6 \
-        python3.6-dev
+        python3.6-dev \
 # Linear Algebra accelerators 
         libopenblas-dev \
         liblapacke-dev
@@ -46,13 +46,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	libavcodec-dev \
         libavformat-dev \
 	libswscale-dev \
-        libv4l-dev\
+        libv4l-dev \
 	libtheora-dev \
 	libvorbis-dev \
 	libxvidcore-dev \
 	libx264-dev \
 # Media I/O
-	libjpeg-turbo8-dev\ 
+	libjpeg-turbo8-dev \ 
         libtiff5-dev \
 	libopenexr-dev \
         libjasper-dev \
