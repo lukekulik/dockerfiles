@@ -203,4 +203,4 @@ EXPOSE 6006
 EXPOSE 8888
 
 WORKDIR "/workspace"
-CMD sh /run_jupyter.sh && jupyter notebook list && bash 
+CMD sh /run_jupyter.sh && sleep 1 && jupyter notebook list && bash 
