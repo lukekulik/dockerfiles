@@ -79,7 +79,7 @@ RUN update-alternatives --config python3
 
 RUN ls /usr/include/
 # Fix OpenBLAS packaging bug in Ubuntu (for OpenCV)
-COPY /usr/include /usr/include/openblas/
+ADD /usr/include/lapacke*.h /usr/include/openblas/
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 	python3 get-pip.py && \
