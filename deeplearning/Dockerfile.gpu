@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         python3.6-dev \
 # Linear Algebra accelerators 
         libopenblas-dev \
-        liblapacke-dev
+        liblapacke-dev \
 	libtbb-dev \
 	libeigen3-dev \
 # Graphical interface
