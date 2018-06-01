@@ -6,7 +6,11 @@ MAINTAINER Luke Kulik
 RUN apt-get update && apt-get install -y --no-install-recommends \
         software-properties-common
 
+# Add Pythom 3 repo
 RUN add-apt-repository ppa:deadsnakes/ppa
+
+# Add GDAL 2.2 repo
+RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
 # "Compilers"
 RUN apt-get update && apt-get install -y --no-install-recommends \  
