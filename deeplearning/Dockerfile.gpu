@@ -84,7 +84,7 @@ RUN pip --no-cache-dir install \
         futures \
         torch \
         torchvision \
-        tensorflow-gpu==1.4.0 \
+        tensorflow-gpu==1.7.0 \
         keras \
         theano \
         h5py \
@@ -114,7 +114,7 @@ RUN pip3 --no-cache-dir install \
         futures \
         torch \
         torchvision \
-        tensorflow-gpu==1.4.0 \
+        tensorflow-gpu==1.7.0 \
         keras \
         theano \
         h5py \
