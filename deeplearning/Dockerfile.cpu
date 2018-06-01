@@ -66,7 +66,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Messaging kernel
         libzmq3-dev \	
         && \
+# Fix OpenBLAS packaging bug (for OpenCV)
     cp /usr/include/lapacke*.h /usr/include/openblas && \
+# Clean-up
     apt-get clean && \
     apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
@@ -77,10 +79,6 @@ RUN update-alternatives --set libblas.so.3 /usr/lib/openblas-base/libblas.so.3
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1 # ?
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2 # ?
 RUN update-alternatives --config python3
-
-#RUN ls /usr/include/
-# Fix OpenBLAS packaging bug in Ubuntu (for OpenCV)
-#ADD /usr/include/lapacke*.h /usr/include/openblas/
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 	python3 get-pip.py && \
