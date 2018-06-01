@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         wget \
         git \
         watch \
-        sshfs
+        sshfs \
 # "Compilers"
         cmake \
         gfortran\
