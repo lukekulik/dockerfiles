@@ -132,19 +132,16 @@ RUN pip3 --no-cache-dir install \
         && \
     python3 -m ipykernel.kernelspec
 	
-
-	
 # Install GDAL 2.2
 RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
         GDAL==`gdal-config --version` \
         && \
     python3 -m ipykernel.kernelspec
-       
 
 ############## CPU specific ###############
 
 # Install OpenCV
-RUN git clone --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
+RUN git clone --depth 1 -branch 3.4.1 https://github.com/opencv/opencv.git /root/opencv && \
 	cd /root/opencv && \
 	mkdir build && \
 	cd build && \
@@ -192,3 +189,4 @@ EXPOSE 6006
 EXPOSE 8888
 
 WORKDIR "/workspace"
+CMD sh /run_jupyter.sh
