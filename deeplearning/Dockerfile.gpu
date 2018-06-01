@@ -141,7 +141,7 @@ RUN pip3 --no-cache-dir install \
 
 # Install GDAL 2.2
 RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
-        gdal \
+        GDA==\`gdal-config --version\` \
         && \
     python3 -m ipykernel.kernelspec
     
