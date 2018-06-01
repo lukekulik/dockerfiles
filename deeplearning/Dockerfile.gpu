@@ -41,7 +41,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         
 # Data processors
 RUN apt-get update && apt-get install -y --no-install-recommends \  
-        ffmpeg-devel \
+        ffmpeg-dev \
         libgdal-dev \ 
         libnetcdf-dev \
         libhdf5-dev \
@@ -57,7 +57,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libtiff5-dev \
         libjasper-dev \
         libpng12-dev \
-        libjpeg-turbo-devel\ 
+        libjpeg-turbo-dev\ 
         && \
     apt-get clean && \
     apt-get autoremove && \
