@@ -1,6 +1,13 @@
-FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu16.04
+FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+# FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu16.04
 
 MAINTAINER Luke Kulik
+
+#RUN echo -e "\n**********************\nNVIDIA Driver Version\n**********************\n" && \
+#	cat /proc/driver/nvidia/version && \
+#	echo -e "\n**********************\nCUDA Version\n**********************\n" && \
+#	nvcc -V && \
+#	echo -e "\n\nBuilding your Deep Learning Docker Image...\n"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         software-properties-common
@@ -59,7 +66,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libjpeg-dev \ 
         && \
     apt-get clean && \
+    apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
+
+# Link BLAS library to use OpenBLAS using the alternatives mechanism (https://www.scipy.org/scipylib/building/linux.html#debian-ubuntu)
+RUN update-alternatives --set libblas.so.3 /usr/lib/openblas-base/libblas.so.3 
     
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1 # ?
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2 # ?
@@ -74,26 +85,26 @@ RUN pip --no-cache-dir install \
         ipykernel \
         jupyter \
         jupyterlab \
+        pillow-simd \
         matplotlib \
         numpy \
         scipy \
         sklearn \
         pandas \
-        pillow-simd \
+        sympy \
         bcolz \
         futures \
-        torch \
-        torchvision \
-        tensorflow-gpu==1.7.0 \
         keras \
         theano \
         h5py \
         awscli \
         h5netcdf \
-        opencv-python \
         Cython \
         netCDF4 \
         scikit-image \
+        torch \
+        torchvision \
+        tensorflow-gpu==1.7.0 \
         tensorboardX \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         seashells \
@@ -104,26 +115,26 @@ RUN pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
         jupyterlab \
+        pillow-simd \
         matplotlib \
         numpy \
         scipy \
         sklearn \
         pandas \
-        pillow-simd \
+        sympy \
         bcolz \
         futures \
+        h5py \
+        awscli \
+        h5netcdf \
+        Cython \
+        netCDF4 \
+        scikit-image \
         torch \
         torchvision \
         tensorflow-gpu==1.7.0 \
         keras \
         theano \
-        h5py \
-        awscli \
-        h5netcdf \
-        opencv-python \
-        Cython \
-        netCDF4 \
-        scikit-image \
         tensorboardX \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         seashells \
@@ -136,42 +147,50 @@ RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/us
         && \
     python3 -m ipykernel.kernelspec
     
+# Install OpenCV
+RUN git clone --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
+	cd /root/opencv && \
+	mkdir build && \
+	cd build && \
+	cmake -DWITH_QT=ON -DWITH_OPENGL=ON -DFORCE_VTK=ON -DWITH_TBB=ON -DWITH_GDAL=ON -DWITH_XINE=ON -DBUILD_EXAMPLES=ON .. && \
+	make -j"$(nproc)"  && \
+	make install && \
+	ldconfig && \
+	echo 'ln /dev/null /dev/raw1394' >> ~/.bashrc
+        
 # Clone libgpuarray repo and move into it
 RUN cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpuarray && \
-# Make and move into build directory
   mkdir Build && cd Build && \
-# CMake
   cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr && \
-# Make
   make -j"$(nproc)" && \
   make install
+  
 # Install pygpu
 RUN cd /root/libgpuarray && \
   python3 setup.py build_ext -L /usr/lib -I /usr/include && \
   python3 setup.py install
-
+  
 # Set up our notebook config.
 COPY jupyter_notebook_config.py /root/.jupyter/
-
-# Copy sample notebooks.
-COPY notebooks /notebooks
 
 # Jupyter has issues with being run directly:
 #   https://github.com/ipython/ipython/issues/7062
 # We just add a little wrapper script.
 COPY run_jupyter.sh /
 
-# For CUDA profiling, TensorFlow requires CUPTI.
-ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
-
-# Set up .theanorc for CUDA
-RUN echo "[global]\ndevice=cuda\nfloatX=float32\noptimizer_including=cudnn\n[lib]\ncnmem=0.1\n[nvcc]\nfastmath=True" > /root/.theanorc
+# Set up .theanorc for CUDA and OpenBLAS
+RUN echo "[global]\ndevice=gpu\nfloatX=float32\noptimizer_including=cudnn\nmode=FAST_RUN \
+		\n[lib]\ncnmem=0.95 \
+		\n[nvcc]\nfastmath=True \
+		\n[blas]\nldflag = -L/usr/lib/openblas-base -lopenblas \
+		\n[DebugMode]\ncheck_finite=1" \
+	> /root/.theanorc
 
 # TensorBoard
 EXPOSE 6006
 # IPython
 EXPOSE 8888
 
-# start jupyter automaticall here?
+# start jupyter automaticall here? CMD?
 
 WORKDIR "/workspace"
