@@ -141,7 +141,7 @@ RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/us
 ############## CPU specific ###############
 
 # Install OpenCV
-RUN git clone --depth 1 -branch 3.4.1 https://github.com/opencv/opencv.git /root/opencv && \
+RUN git clone --depth 1 --branch 3.4.1 https://github.com/opencv/opencv.git /root/opencv && \
 	cd /root/opencv && \
 	mkdir build && \
 	cd build && \
