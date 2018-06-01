@@ -16,4 +16,3 @@
 
 
 jupyter notebook --port 8888 --allow-root  >> /dev/null 2>&1  &
-jupyter notebook list
