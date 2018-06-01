@@ -5,131 +5,186 @@ MAINTAINER Luke Kulik
 RUN apt-get update && apt-get install -y --no-install-recommends \
         software-properties-common
 
+# Add Python 3 repo
 RUN add-apt-repository ppa:deadsnakes/ppa
+
+# Add GDAL 2.2 repo
 RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \  
+# Essential Linux utilities
         build-essential \
-        g++ \
-        curl \
-        git \
-        vim \
-        libfreetype6-dev \
-        libpng12-dev \
-        libzmq3-dev \
         pkg-config \
+        vim \
+        rsync \
+        tmux \
+        htop \
+        unzip \
+        unrar \
+        curl \
+        wget \
+        git \
+        watch \
+        sshfs \
+# "Compilers"
+        cmake \
+        gfortran\
+        g++ \
         python \
         python-dev \
         python3.6 \
         python3.6-dev \
-        rsync \
-        unzip \
-        wget \
-        tmux \
-        htop \
-        libavcodec-dev \
-        libavformat-dev \
-        libswscale-dev \
-        libgtk2.0-dev \
-        libatlas-base-dev \
-        gfortran\
-        libv4l-dev\
-        libjpeg8-dev \
-        libtiff5-dev \
-        libjasper-dev \
-        libpng12-dev \
-        libjpeg-dev \
+# Linear Algebra accelerators 
         libopenblas-dev \
-        liblapack-dev \
-        unrar-free \
-        cmake \
-        libhdf5-serial-dev \
-        netcdf-bin \
-        libnetcdf-dev \
-        ffmpeg \
-        libgdal-dev \
+        liblapacke-dev \
+	libtbb-dev \
+	libeigen3-dev \
+# Graphical interface
+        libgtk2.0-dev \
+# Video I/O
+	libavcodec-dev \
+        libavformat-dev \
+	libswscale-dev \
+        libv4l-dev \
+	libtheora-dev \
+	libvorbis-dev \
+	libxvidcore-dev \
+	libx264-dev \
+# Media I/O
+	libjpeg-turbo8-dev \ 
+        libtiff5-dev \
+	libopenexr-dev \
+        libjasper-dev \
+	libgdal-dev \ 
+        libpng12-dev \
+	libnetcdf-dev \
+        libhdf5-dev \	
+# Media processing
+	ffmpeg \
+# Fonts
+        libfreetype6-dev \
+# Messaging kernel
+        libzmq3-dev \	
         && \
     apt-get clean && \
+    apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
+
+# Link BLAS library to use OpenBLAS using the alternatives mechanism (https://www.scipy.org/scipylib/building/linux.html#debian-ubuntu)
+RUN update-alternatives --set libblas.so.3 /usr/lib/openblas-base/libblas.so.3 
     
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1 # ?
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2 # ?
 RUN update-alternatives --config python3
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
-    python3 get-pip.py && \
-    python get-pip.py && \
-    rm get-pip.py
-
-# Install PyTorch
-RUN pip3 --no-cache-dir install \
-    http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp36-cp36m-linux_x86_64.whl
-
-# Install Tensorflow
-# RUN pip3 install --upgrade \
-#     https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.6.0-cp36-cp36m-linux_x86_64.whl
-
-RUN pip3 --no-cache-dir install \
-        numpy \
-        scipy \
+	python3 get-pip.py && \
+	python get-pip.py && \
+	rm get-pip.py
+    
+RUN pip --no-cache-dir install \
         ipykernel \
         jupyter \
         jupyterlab \
+        pillow-simd \
         matplotlib \
+        numpy \
+        scipy \
         sklearn \
         pandas \
-        pillow-simd \
         bcolz \
         futures \
-        torchvision \
-        tensorflow \
         h5py==2.8.0rc1 \
         awscli \
         h5netcdf \
-        tqdm \
-        opencv-python \
         Cython \
-        theano \
         netCDF4 \
         scikit-image \
         keras \
+        theano \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
-        spacy==1.10.1 \
-        chainer \
-        pytest \
-        gensim \
-        pyxDamerauLevenshtein \
+        seashells \
+        && \
+    python -m ipykernel.kernelspec
+    
+RUN pip3 --no-cache-dir install \
+        ipykernel \
+        jupyter \
+        jupyterlab \
+        pillow-simd \
+        matplotlib \
+        numpy \
+        scipy \
+        sklearn \
+        pandas \
+        bcolz \
+        futures \
+        h5py==2.8.0rc1 \
+        awscli \
+        h5netcdf \
+        Cython \
+        netCDF4 \
+        scikit-image \
+        keras \
+        theano \
+        http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
+        seashells \
         && \
     python3 -m ipykernel.kernelspec
-    
+	
+
+	
 # Install GDAL 2.2
 RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
-        gdal \
+        GDAL==`gdal-config --version` \
         && \
     python3 -m ipykernel.kernelspec
+       
 
-# 
-# --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
-# These lines will be edited automatically by parameterized_docker_build.sh. #
-# COPY _PIP_FILE_ /
-# RUN pip --no-cache-dir install /_PIP_FILE_
-# RUN rm -f /_PIP_FILE_
+############## CPU specific ###############
 
-RUN ln -s /usr/bin/python3 /usr/bin/python#
+# Install OpenCV
+RUN git clone --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
+	cd /root/opencv && \
+	mkdir build && \
+	cd build && \
+	cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DWITH_CUDA=OFF -DENABLE_FAST_MATH=1 \
+    	-DCUDA_FAST_MATH=0 -D WITH_CUBLAS=0 -DWITH_QT=OFF -DWITH_OPENGL=ON -DFORCE_VTK=OFF \
+	-DWITH_TBB=ON -DWITH_GDAL=ON -DWITH_XINE=OFF -DBUILD_EXAMPLES=OFF .. && \
+	make -j"$(nproc)"  && \
+	make install && \
+	ldconfig && \
+	echo 'ln /dev/null /dev/raw1394' >> ~/.bashrc && \
+	rm -rf /root/opencv
+        
+RUN pip --no-cache-dir install \
+	http://download.pytorch.org/whl/cpu/torch-0.4.0-cp27-cp27mu-linux_x86_64.whl   \
+        torchvision \
+        tensorflow==1.7.0 \
+        tensorboardX
+
+RUN pip3 --no-cache-dir install \
+	http://download.pytorch.org/whl/cpu/torch-0.4.0-cp36-cp36m-linux_x86_64.whl  \
+        torchvision \
+        tensorflow==1.7.0 \
+        tensorboardX
+        
+# Set up .theanorc for OpenBLAS
+RUN echo "[global]\ndevice=cpu\nfloatX=float32\nmode=FAST_RUN \
+		\n[lib]\ncnmem=0.95 \
+		\n[nvcc]\nfastmath=True \
+		\n[blas]\nldflag = -L/usr/lib/openblas-base -lopenblas \
+		\n[DebugMode]\ncheck_finite=1" \ > /root/.theanorc
+                
+############ End CPU specific ##############
 
 # Set up our notebook config.
 COPY jupyter_notebook_config.py /root/.jupyter/
-
-# Copy sample notebooks.
-COPY notebooks /notebooks
 
 # Jupyter has issues with being run directly:
 #   https://github.com/ipython/ipython/issues/7062
 # We just add a little wrapper script.
 COPY run_jupyter.sh /
-
-# For CUDA profiling, TensorFlow requires CUPTI.
-ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
 
 # TensorBoard
 EXPOSE 6006
