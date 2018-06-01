@@ -7,7 +7,7 @@ services:
 
 install:
   - cd deeplearning
-  - docker build -t lkulik/deeplearning-cpu -f Dockerfile .
+  - docker build -t lkulik/deeplearning-cpu -f Dockerfile.cpu .
   - docker build -t lkulik/deeplearning-gpu -f Dockerfile.gpu .
   - docker run -d -p 8888:8888 -ti lkulik/deeplearning-cpu
   - docker run -d -p 9999:9999 -ti lkulik/deeplearning-gpu
