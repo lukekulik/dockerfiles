@@ -6,29 +6,14 @@ MAINTAINER Luke Kulik
 RUN apt-get update && apt-get install -y --no-install-recommends \
         software-properties-common
 
-# Add Pythom 3 repo
+# Add Python 3 repo
 RUN add-apt-repository ppa:deadsnakes/ppa
 
 # Add GDAL 2.2 repo
 RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
-# "Compilers"
 RUN apt-get update && apt-get install -y --no-install-recommends \  
-        cmake \
-        gfortran\
-        g++ \
-        python \
-        python-dev \
-        python3.6 \
-        python3.6-dev
-        
-# Linear Algebra accelerators 
-RUN apt-get update && apt-get install -y --no-install-recommends \  
-        libopenblas-dev \
-        liblapacke-dev
-        
 # Essential Linux utilities
-RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         pkg-config \
         vim \
@@ -42,26 +27,45 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         git \
         watch \
         sshfs
-        
-# Data processors
-RUN apt-get update && apt-get install -y --no-install-recommends \  
-        ffmpeg \
-        libgdal-dev \ 
-        libnetcdf-dev \
-        libhdf5-dev \
-        libfreetype6-dev \
-        libpng12-dev \
-        libzmq3-dev \
-        libavcodec-dev \
-        libavformat-dev \
-        libswscale-dev \
+# "Compilers"
+        cmake \
+        gfortran\
+        g++ \
+        python \
+        python-dev \
+        python3.6 \
+        python3.6-dev
+# Linear Algebra accelerators 
+        libopenblas-dev \
+        liblapacke-dev
+	libtbb-dev \
+	libeigen3-dev \
+# Graphical interface
         libgtk2.0-dev \
+# Video I/O
+	libavcodec-dev \
+        libavformat-dev \
+	libswscale-dev \
         libv4l-dev\
-        libjpeg8-dev \
+	libtheora-dev \
+	libvorbis-dev \
+	libxvidcore-dev \
+	libx264-dev \
+# Media I/O
+	libjpeg-turbo8-dev\ 
         libtiff5-dev \
+	libopenexr-dev \
         libjasper-dev \
+	libgdal-dev \ 
         libpng12-dev \
-        libjpeg-turbo8-dev\ 
+	libnetcdf-dev \
+        libhdf5-dev \	
+# Media processing
+	ffmpeg \
+# Fonts
+        libfreetype6-dev \
+# Messaging kernel
+        libzmq3-dev \	
         && \
     apt-get clean && \
     apt-get autoremove && \
@@ -75,9 +79,9 @@ RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2 
 RUN update-alternatives --config python3
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
-    python3 get-pip.py && \
-    python get-pip.py && \
-    rm get-pip.py
+	python3 get-pip.py && \
+	python get-pip.py && \
+	rm get-pip.py
     
 RUN pip --no-cache-dir install \
         ipykernel \
@@ -89,7 +93,6 @@ RUN pip --no-cache-dir install \
         scipy \
         sklearn \
         pandas \
-        sympy \
         bcolz \
         futures \
         keras \
@@ -119,7 +122,6 @@ RUN pip3 --no-cache-dir install \
         scipy \
         sklearn \
         pandas \
-        sympy \
         bcolz \
         futures \
         h5py \
@@ -144,11 +146,14 @@ RUN git clone --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
 	cd /root/opencv && \
 	mkdir build && \
 	cd build && \
-	cmake -DWITH_QT=OFF -DWITH_OPENGL=ON -DFORCE_VTK=ON -DWITH_TBB=ON -DWITH_GDAL=ON -DWITH_XINE=ON -DBUILD_EXAMPLES=ON .. && \
+	cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DWITH_CUDA=ON -DENABLE_FAST_MATH=1 \
+    	-DCUDA_FAST_MATH=1 -D WITH_CUBLAS=1 -DWITH_QT=OFF -DWITH_OPENGL=ON -DFORCE_VTK=OFF \
+	-DWITH_TBB=ON -DWITH_GDAL=ON -DWITH_XINE=OFF -DBUILD_EXAMPLES=OFF .. && \
 	make -j"$(nproc)"  && \
 	make install && \
 	ldconfig && \
-	echo 'ln /dev/null /dev/raw1394' >> ~/.bashrc
+	echo 'ln /dev/null /dev/raw1394' >> ~/.bashrc && \
+	rm -rf /root/opencv
 	
 # Install GDAL 2.2
 RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
@@ -159,7 +164,7 @@ RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/us
 # Clone libgpuarray repo and move into it
 RUN cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpuarray && \
   mkdir Build && cd Build && \
-  cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr && \
+  cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr && \
   make -j"$(nproc)" && \
   make install
   
@@ -181,14 +186,12 @@ RUN echo "[global]\ndevice=gpu\nfloatX=float32\noptimizer_including=cudnn\nmode=
 		\n[lib]\ncnmem=0.95 \
 		\n[nvcc]\nfastmath=True \
 		\n[blas]\nldflag = -L/usr/lib/openblas-base -lopenblas \
-		\n[DebugMode]\ncheck_finite=1" \
-	> /root/.theanorc
+		\n[DebugMode]\ncheck_finite=1" \ > /root/.theanorc
 
 # TensorBoard
 EXPOSE 6006
 # IPython
 EXPOSE 8888
 
-# start jupyter automaticall here? CMD?
-
 WORKDIR "/workspace"
+# start jupyter automaticall here? CMD?
