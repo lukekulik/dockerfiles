@@ -1,5 +1,4 @@
-FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
-# FROM nvidia/cuda:9.2-cudnn7-devel-ubuntu16.04
+FROM nvidia/cuda:9.1-cudnn7-devel-ubuntu16.04
 
 MAINTAINER Luke Kulik
 
@@ -95,18 +94,14 @@ RUN pip --no-cache-dir install \
         pandas \
         bcolz \
         futures \
-        keras \
-        theano \
-        h5py \
+        h5py==2.8.0rc1 \
         awscli \
         h5netcdf \
         Cython \
         netCDF4 \
         scikit-image \
-        torch \
-        torchvision \
-        tensorflow-gpu==1.7.0 \
-        tensorboardX \
+        keras \
+        theano \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         seashells \
         && \
@@ -124,23 +119,28 @@ RUN pip3 --no-cache-dir install \
         pandas \
         bcolz \
         futures \
-        h5py \
+        h5py==2.8.0rc1 \
         awscli \
         h5netcdf \
         Cython \
         netCDF4 \
         scikit-image \
-        torch \
-        torchvision \
-        tensorflow-gpu==1.7.0 \
         keras \
         theano \
-        tensorboardX \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         seashells \
         && \
     python3 -m ipykernel.kernelspec
-    
+		
+# Install GDAL 2.2
+RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
+        GDAL==`gdal-config --version` \
+        && \
+    python3 -m ipykernel.kernelspec
+       
+
+############## GPU specific ###############
+
 # Install OpenCV
 RUN git clone --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
 	cd /root/opencv && \
@@ -155,12 +155,18 @@ RUN git clone --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
 	echo 'ln /dev/null /dev/raw1394' >> ~/.bashrc && \
 	rm -rf /root/opencv
 	
-# Install GDAL 2.2
-RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
-        GDAL==`gdal-config --version` \
-        && \
-    python3 -m ipykernel.kernelspec
-        
+RUN pip --no-cache-dir install \
+	http://download.pytorch.org/whl/cu91/torch-0.4.0-cp27-cp27mu-linux_x86_64.whl  \
+        torchvision \
+        tensorflow-gpu==1.7.0 \
+        tensorboardX
+
+RUN pip3 --no-cache-dir install \
+	http://download.pytorch.org/whl/cu91/torch-0.4.0-cp36-cp36m-linux_x86_64.whl  \
+        torchvision \
+        tensorflow-gpu==1.7.0 \
+        tensorboardX
+	  
 # Clone libgpuarray repo and move into it
 RUN cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpuarray && \
   mkdir Build && cd Build && \
@@ -172,7 +178,16 @@ RUN cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpu
 RUN cd /root/libgpuarray && \
   python3 setup.py build_ext -L /usr/lib -I /usr/include && \
   python3 setup.py install
-  
+
+# Set up .theanorc for CUDA and OpenBLAS
+RUN echo "[global]\ndevice=gpu\nfloatX=float32\noptimizer_including=cudnn\nmode=FAST_RUN \
+		\n[lib]\ncnmem=0.95 \
+		\n[nvcc]\nfastmath=True \
+		\n[blas]\nldflag = -L/usr/lib/openblas-base -lopenblas \
+		\n[DebugMode]\ncheck_finite=1" \ > /root/.theanorc
+		
+############ End GPU specific ##############
+
 # Set up our notebook config.
 COPY jupyter_notebook_config.py /root/.jupyter/
 
@@ -181,12 +196,7 @@ COPY jupyter_notebook_config.py /root/.jupyter/
 # We just add a little wrapper script.
 COPY run_jupyter.sh /
 
-# Set up .theanorc for CUDA and OpenBLAS
-RUN echo "[global]\ndevice=gpu\nfloatX=float32\noptimizer_including=cudnn\nmode=FAST_RUN \
-		\n[lib]\ncnmem=0.95 \
-		\n[nvcc]\nfastmath=True \
-		\n[blas]\nldflag = -L/usr/lib/openblas-base -lopenblas \
-		\n[DebugMode]\ncheck_finite=1" \ > /root/.theanorc
+
 
 # TensorBoard
 EXPOSE 6006
