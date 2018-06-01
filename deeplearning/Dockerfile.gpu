@@ -66,6 +66,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Messaging kernel
         libzmq3-dev \	
         && \
+# Fix OpenBLAS packaging bug for OpenCV (https://github.com/opencv/opencv/issues/9953)
+    cp /usr/include/lapacke*.h /usr/include/openblas && \
+# Clean-up
     apt-get clean && \
     apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
@@ -131,18 +134,17 @@ RUN pip3 --no-cache-dir install \
         seashells \
         && \
     python3 -m ipykernel.kernelspec
-		
+	
 # Install GDAL 2.2
 RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
         GDAL==`gdal-config --version` \
         && \
     python3 -m ipykernel.kernelspec
-       
 
 ############## GPU specific ###############
 
 # Install OpenCV
-RUN git clone --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
+RUN git clone -b 3.4.1 --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
 	cd /root/opencv && \
 	mkdir build && \
 	cd build && \
@@ -191,12 +193,9 @@ RUN echo "[global]\ndevice=gpu\nfloatX=float32\noptimizer_including=cudnn\nmode=
 # Set up our notebook config.
 COPY jupyter_notebook_config.py /root/.jupyter/
 
-# Jupyter has issues with being run directly:
-#   https://github.com/ipython/ipython/issues/7062
+# Jupyter has issues with being run directly (https://github.com/ipython/ipython/issues/7062)
 # We just add a little wrapper script.
 COPY run_jupyter.sh /
-
-
 
 # TensorBoard
 EXPOSE 6006
@@ -204,4 +203,4 @@ EXPOSE 6006
 EXPOSE 8888
 
 WORKDIR "/workspace"
-# start jupyter automaticall here? CMD?
+CMD sh /run_jupyter.sh
