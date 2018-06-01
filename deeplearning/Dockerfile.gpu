@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Linear Algebra accelerators 
 RUN apt-get update && apt-get install -y --no-install-recommends \  
         libopenblas-dev \
-        liblapack-dev
+        liblapacke-dev
         
 # Essential Linux utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
