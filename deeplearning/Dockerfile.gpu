@@ -181,7 +181,8 @@ RUN cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpu
 # Install pygpu
 RUN cd /root/libgpuarray && \
   python3 setup.py build_ext -L /usr/lib -I /usr/include && \
-  python3 setup.py install
+  python3 setup.py install && \
+  rm -rf /root/libgpuarray
 
 # Set up .theanorc for CUDA and OpenBLAS
 RUN echo "[global]\ndevice=gpu\nfloatX=float32\noptimizer_including=cudnn\nmode=FAST_RUN \
