@@ -161,14 +161,14 @@ RUN pip --no-cache-dir install \
 	http://download.pytorch.org/whl/cu91/torch-0.4.0-cp27-cp27mu-linux_x86_64.whl  \
         torchvision \
 # Tensorflow GPU not currently available due to CUDA9.1 incompatibility
-        tensorflow \
+        tensorflow==1.5.0 \
         tensorboardX
 
 RUN pip3 --no-cache-dir install \
 	http://download.pytorch.org/whl/cu91/torch-0.4.0-cp36-cp36m-linux_x86_64.whl  \
         torchvision \
 # Tensorflow GPU not currently available due to CUDA9.1 incompatibility
-        tensorflow \
+        tensorflow==1.5.0 \
         tensorboardX
 	  
 # Clone libgpuarray repo and move into it
