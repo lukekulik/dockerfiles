@@ -160,13 +160,15 @@ RUN git clone -b 3.4.1 --depth 1 https://github.com/opencv/opencv.git /root/open
 RUN pip --no-cache-dir install \
 	http://download.pytorch.org/whl/cu91/torch-0.4.0-cp27-cp27mu-linux_x86_64.whl  \
         torchvision \
-        tensorflow-gpu==1.7.0 \
+# Tensorflow GPU not currently available due to CUDA9.1 incompatibility
+        tensorflow \
         tensorboardX
 
 RUN pip3 --no-cache-dir install \
 	http://download.pytorch.org/whl/cu91/torch-0.4.0-cp36-cp36m-linux_x86_64.whl  \
         torchvision \
-        tensorflow-gpu==1.7.0 \
+# Tensorflow GPU not currently available due to CUDA9.1 incompatibility
+        tensorflow \
         tensorboardX
 	  
 # Clone libgpuarray repo and move into it
