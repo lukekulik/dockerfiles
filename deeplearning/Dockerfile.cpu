@@ -160,13 +160,13 @@ RUN git clone -b 3.4.1 --depth 1 https://github.com/opencv/opencv.git /root/open
 RUN pip --no-cache-dir install \
 	http://download.pytorch.org/whl/cpu/torch-0.4.0-cp27-cp27mu-linux_x86_64.whl   \
         torchvision \
-        tensorflow==1.7.0 \
+        tensorflow==1.5.0 \
         tensorboardX
 
 RUN pip3 --no-cache-dir install \
 	http://download.pytorch.org/whl/cpu/torch-0.4.0-cp36-cp36m-linux_x86_64.whl  \
         torchvision \
-        tensorflow==1.7.0 \
+        tensorflow==1.5.0 \
         tensorboardX
         
 # Set up .theanorc for OpenBLAS
@@ -191,4 +191,5 @@ EXPOSE 6006
 EXPOSE 8888
 
 WORKDIR "/workspace"
-CMD sh /run_jupyter.sh
+CMD sh /run_jupyter.sh && bash 
+
