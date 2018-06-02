@@ -194,6 +194,7 @@ RUN echo "[global]\ndevice=gpu\nfloatX=float32\noptimizer_including=cudnn\nmode=
 ############ End GPU specific ##############
 
 # Set up our notebook config.
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /mycert.pem -out /mycert.pem
 COPY jupyter_notebook_config.py /root/.jupyter/
 
 # Jupyter has issues with being run directly (https://github.com/ipython/ipython/issues/7062)
