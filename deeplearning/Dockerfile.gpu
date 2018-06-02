@@ -218,5 +218,8 @@ EXPOSE 6006
 # IPython
 EXPOSE 8888
 
+# Configure git
+RUN git config --global credential.helper cache
+
 WORKDIR "/workspace"
 CMD sh /run_jupyter.sh && bash 
