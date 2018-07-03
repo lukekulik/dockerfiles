@@ -97,7 +97,7 @@ RUN pip --no-cache-dir install \
         pandas \
         bcolz \
         futures \
-        h5py==2.8.0rc1 \
+        h5py \
         awscli \
         h5netcdf \
         Cython \
@@ -122,7 +122,7 @@ RUN pip3 --no-cache-dir install \
         pandas \
         bcolz \
         futures \
-        h5py==2.8.0rc1 \
+        h5py \
         awscli \
         h5netcdf \
         Cython \
