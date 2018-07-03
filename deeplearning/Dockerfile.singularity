@@ -1,0 +1,206 @@
+Bootstrap: docker
+From: tensorflow/tensorflow:1.5.0-gpu
+
+%post
+
+ apt-get update && apt-get install -y --no-install-recommends \
+        software-properties-common
+
+ add-apt-repository ppa:deadsnakes/ppa
+ add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+
+ apt-get update && apt-get install -y --no-install-recommends \
+# Essential Linux utilities
+        build-essential \
+        pkg-config \
+        vim \
+        rsync \
+        tmux \
+        htop \
+        unzip \
+        unrar \
+        curl \
+        wget \
+        git \
+        watch \
+        sshfs \
+# "Compilers"
+        cmake \
+        gfortran\
+        g++ \
+        python \
+        python-dev \
+        python3.6 \
+        python3.6-dev \
+# Linear Algebra accelerators 
+        libopenblas-dev \
+        liblapacke-dev \
+        libtbb-dev \
+        libeigen3-dev \
+# Graphical interface
+        libgtk2.0-dev \
+# Video I/O
+        libavcodec-dev \
+        libavformat-dev \
+        libswscale-dev \
+        libv4l-dev \
+        libtheora-dev \
+        libvorbis-dev \
+        libxvidcore-dev \
+        libx264-dev \
+# Media I/O
+        libjpeg-turbo8-dev \ 
+        libtiff5-dev \
+        libopenexr-dev \
+        libjasper-dev \
+        libgdal-dev \ 
+        libpng12-dev \
+        libnetcdf-dev \
+        libhdf5-dev \	
+# Media processing
+	      ffmpeg \
+# Fonts
+        libfreetype6-dev \
+# Messaging kernel
+        libzmq3-dev \	
+        && \
+# Fix OpenBLAS packaging bug for OpenCV (https://github.com/opencv/opencv/issues/9953)
+    cp /usr/include/lapacke*.h /usr/include/openblas && \
+# Clean-up
+    apt-get clean && \
+    apt-get autoremove && \
+    rm -rf /var/lib/apt/lists/*
+
+ update-alternatives --set libblas.so.3 /usr/lib/openblas-base/libblas.so.3 
+
+ update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+ update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
+ update-alternatives --config python3
+    
+ curl -O https://bootstrap.pypa.io/get-pip.py && \
+    python3 get-pip.py && \
+    python2 get-pip.py && \
+    rm get-pip.py
+    
+ pip2 --no-cache-dir install \
+        ipykernel \
+        jupyter \
+        jupyterlab \
+        pillow-simd \
+        matplotlib \
+        numpy \
+        scipy \
+        sklearn \
+        pandas \
+        bcolz \
+        futures \
+        h5py \
+        awscli \
+        h5netcdf \
+        Cython \
+        netCDF4 \
+        scikit-image \
+        keras \
+        theano \
+        http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
+        seashells \
+        && \
+    python2 -m ipykernel.kernelspec
+
+ pip3 --no-cache-dir install \
+        ipykernel \
+        jupyter \
+        jupyterlab \
+        pillow-simd \
+        matplotlib \
+        numpy \
+        scipy \
+        sklearn \
+        pandas \
+        bcolz \
+        futures \
+        h5py \
+        awscli \
+        h5netcdf \
+        Cython \
+        netCDF4 \
+        scikit-image \
+        keras \
+        theano \
+        http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
+        seashells \
+        && \
+    python3 -m ipykernel.kernelspec
+    
+ pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
+        GDAL==`gdal-config --version` \
+        && \
+    python3 -m ipykernel.kernelspec
+    
+
+    
+############## GPU specific ###############
+
+
+git clone -b 3.4.1 --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
+	cd /root/opencv && \
+	mkdir build && \
+	cd build && \
+	cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DWITH_CUDA=ON -DENABLE_FAST_MATH=1 \
+    	-DCUDA_FAST_MATH=1 -D WITH_CUBLAS=1 -DWITH_QT=OFF -DWITH_OPENGL=ON -DFORCE_VTK=OFF \
+	-DWITH_TBB=ON -DWITH_GDAL=ON -DWITH_XINE=OFF -DBUILD_EXAMPLES=OFF .. && \
+	make -j"$(nproc)"  && \
+	make install && \
+	ldconfig && \
+	echo 'ln /dev/null /dev/raw1394' >> ~/.bashrc && \
+	rm -rf /root/opencv
+  
+  
+pip --no-cache-dir install \
+	http://download.pytorch.org/whl/cu90/torch-0.4.0-cp27-cp27mu-linux_x86_64.whl  \
+        torchvision \
+        tensorboardX
+
+pip3 --no-cache-dir install \
+	http://download.pytorch.org/whl/cu90/torch-0.4.0-cp36-cp36m-linux_x86_64.whl  \
+        torchvision \
+        tensorboardX
+        
+# Clone libgpuarray repo and move into it
+ cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpuarray && \
+  mkdir Build && cd Build && \
+  cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr && \
+  make -j"$(nproc)" && \
+  make install
+  
+# Install pygpu
+ cd /root/libgpuarray && \
+  python3 setup.py build_ext -L /usr/lib -I /usr/include && \
+  python3 setup.py install && \
+  rm -rf /root/libgpuarray
+
+# Set up .theanorc for CUDA and OpenBLAS
+ echo "[global]\ndevice=gpu\nfloatX=float32\noptimizer_including=cudnn\nmode=FAST_RUN \
+		\n[lib]\ncnmem=0.95 \
+		\n[nvcc]\nfastmath=True \
+		\n[blas]\nldflag = -L/usr/lib/openblas-base -lopenblas \
+		\n[DebugMode]\ncheck_finite=1" \ > /root/.theanorc
+    
+############ End GPU specific ##############
+
+echo "Generating self-signed certificate" && \
+	mkdir -p /etc/ssl && \
+	cd /etc/ssl && \
+	# Generating signing SSL private key
+	openssl genrsa -des3 -passout pass:x -out key.pem 2048 && \
+	# Removing passphrase from private key
+	cp key.pem key.pem.orig && \
+	openssl rsa -passin pass:x -in key.pem.orig -out key.pem && \
+	# Generating certificate signing request
+	openssl req -new -key key.pem -out cert.csr -subj "/C=GB/ST=GB/L=London/O=UK Trade & Investment/OU=Digital/CN=default" && \
+	# Generating self-signed certificate
+	openssl x509 -req -days 3650 -in cert.csr -signkey key.pem -out cert.pem 
+  
+%environment
+
+  export XDG_RUNTIME_DIR=""
