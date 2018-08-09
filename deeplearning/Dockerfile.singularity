@@ -1,17 +1,15 @@
-FROM nvidia/cuda:9.1-cudnn7-devel-ubuntu16.04
+Bootstrap: docker
+From: tensorflow/tensorflow:1.5.0-gpu
 
-MAINTAINER Luke Kulik
+%post
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+ apt-get update && apt-get install -y --no-install-recommends \
         software-properties-common
 
-# Add Python 3 repo
-RUN add-apt-repository ppa:deadsnakes/ppa
+ add-apt-repository ppa:deadsnakes/ppa
+ add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
-# Add GDAL 2.2 repo
-RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-
-RUN apt-get update && apt-get install -y --no-install-recommends \  
+ apt-get update && apt-get install -y --no-install-recommends \
 # Essential Linux utilities
         build-essential \
         pkg-config \
@@ -37,30 +35,30 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Linear Algebra accelerators 
         libopenblas-dev \
         liblapacke-dev \
-	libtbb-dev \
-	libeigen3-dev \
+        libtbb-dev \
+        libeigen3-dev \
 # Graphical interface
         libgtk2.0-dev \
 # Video I/O
-	libavcodec-dev \
+        libavcodec-dev \
         libavformat-dev \
-	libswscale-dev \
+        libswscale-dev \
         libv4l-dev \
-	libtheora-dev \
-	libvorbis-dev \
-	libxvidcore-dev \
-	libx264-dev \
+        libtheora-dev \
+        libvorbis-dev \
+        libxvidcore-dev \
+        libx264-dev \
 # Media I/O
-	libjpeg-turbo8-dev \ 
+        libjpeg-turbo8-dev \ 
         libtiff5-dev \
-	libopenexr-dev \
+        libopenexr-dev \
         libjasper-dev \
-	libgdal-dev \ 
+        libgdal-dev \ 
         libpng12-dev \
-	libnetcdf-dev \
+        libnetcdf-dev \
         libhdf5-dev \	
 # Media processing
-	ffmpeg \
+	      ffmpeg \
 # Fonts
         libfreetype6-dev \
 # Messaging kernel
@@ -73,19 +71,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
 
-# Link BLAS library to use OpenBLAS using the alternatives mechanism (https://www.scipy.org/scipylib/building/linux.html#debian-ubuntu)
-RUN update-alternatives --set libblas.so.3 /usr/lib/openblas-base/libblas.so.3 
-    
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1 # ?
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2 # ?
-RUN update-alternatives --config python3
+ update-alternatives --set libblas.so.3 /usr/lib/openblas-base/libblas.so.3 
 
-RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
-	python3 get-pip.py && \
-	python get-pip.py && \
-	rm get-pip.py
+ update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+ update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
+ update-alternatives --config python3
     
-RUN pip --no-cache-dir install \
+ curl -O https://bootstrap.pypa.io/get-pip.py && \
+    python3 get-pip.py && \
+    python2 get-pip.py && \
+    rm get-pip.py
+    
+ pip2 --no-cache-dir install \
         ipykernel \
         jupyter \
         jupyterlab \
@@ -108,9 +105,9 @@ RUN pip --no-cache-dir install \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
         seashells \
         && \
-    python -m ipykernel.kernelspec
-    
-RUN pip3 --no-cache-dir install \
+    python2 -m ipykernel.kernelspec
+
+ pip3 --no-cache-dir install \
         ipykernel \
         jupyter \
         jupyterlab \
@@ -134,17 +131,18 @@ RUN pip3 --no-cache-dir install \
         seashells \
         && \
     python3 -m ipykernel.kernelspec
-	
-# Install GDAL 2.2
-RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
+    
+ pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
         GDAL==`gdal-config --version` \
         && \
     python3 -m ipykernel.kernelspec
+    
 
+    
 ############## GPU specific ###############
 
-# Install OpenCV
-RUN git clone -b 3.4.1 --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
+
+git clone -b 3.4.1 --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
 	cd /root/opencv && \
 	mkdir build && \
 	cd build && \
@@ -156,45 +154,41 @@ RUN git clone -b 3.4.1 --depth 1 https://github.com/opencv/opencv.git /root/open
 	ldconfig && \
 	echo 'ln /dev/null /dev/raw1394' >> ~/.bashrc && \
 	rm -rf /root/opencv
-	
-RUN pip --no-cache-dir install \
-	http://download.pytorch.org/whl/cu91/torch-0.4.0-cp27-cp27mu-linux_x86_64.whl  \
+  
+  
+pip --no-cache-dir install \
+	http://download.pytorch.org/whl/cu90/torch-0.4.0-cp27-cp27mu-linux_x86_64.whl  \
         torchvision \
-# Tensorflow GPU not currently available due to CUDA9.1 incompatibility
-        tensorflow==1.5.0 \
         tensorboardX
 
-RUN pip3 --no-cache-dir install \
-	http://download.pytorch.org/whl/cu91/torch-0.4.0-cp36-cp36m-linux_x86_64.whl  \
+pip3 --no-cache-dir install \
+	http://download.pytorch.org/whl/cu90/torch-0.4.0-cp36-cp36m-linux_x86_64.whl  \
         torchvision \
-# Tensorflow GPU not currently available due to CUDA9.1 incompatibility
-        tensorflow==1.5.0 \
         tensorboardX
-	  
+        
 # Clone libgpuarray repo and move into it
-RUN cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpuarray && \
+ cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpuarray && \
   mkdir Build && cd Build && \
   cmake .. -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr && \
   make -j"$(nproc)" && \
   make install
   
 # Install pygpu
-RUN cd /root/libgpuarray && \
+ cd /root/libgpuarray && \
   python3 setup.py build_ext -L /usr/lib -I /usr/include && \
   python3 setup.py install && \
   rm -rf /root/libgpuarray
 
 # Set up .theanorc for CUDA and OpenBLAS
-RUN echo "[global]\ndevice=gpu\nfloatX=float32\noptimizer_including=cudnn\nmode=FAST_RUN \
+ echo "[global]\ndevice=gpu\nfloatX=float32\noptimizer_including=cudnn\nmode=FAST_RUN \
 		\n[lib]\ncnmem=0.95 \
 		\n[nvcc]\nfastmath=True \
 		\n[blas]\nldflag = -L/usr/lib/openblas-base -lopenblas \
 		\n[DebugMode]\ncheck_finite=1" \ > /root/.theanorc
-		
+    
 ############ End GPU specific ##############
 
-# Set up our notebook config.
-RUN echo "Generating self-signed certificate" && \
+echo "Generating self-signed certificate" && \
 	mkdir -p /etc/ssl && \
 	cd /etc/ssl && \
 	# Generating signing SSL private key
@@ -206,20 +200,7 @@ RUN echo "Generating self-signed certificate" && \
 	openssl req -new -key key.pem -out cert.csr -subj "/C=GB/ST=GB/L=London/O=UK Trade & Investment/OU=Digital/CN=default" && \
 	# Generating self-signed certificate
 	openssl x509 -req -days 3650 -in cert.csr -signkey key.pem -out cert.pem 
-    
-COPY jupyter_notebook_config.py /root/.jupyter/
+  
+%environment
 
-# Jupyter has issues with being run directly (https://github.com/ipython/ipython/issues/7062)
-# We just add a little wrapper script.
-COPY run_jupyter.sh /
-
-# TensorBoard
-EXPOSE 6006
-# IPython
-EXPOSE 8888
-
-# Configure git
-RUN git config --global credential.helper cache
-
-WORKDIR "/workspace"
-CMD sh /run_jupyter.sh && bash 
+  export XDG_RUNTIME_DIR=""
