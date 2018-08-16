@@ -84,7 +84,8 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 	python3 get-pip.py && \
 	python get-pip.py && \
 	rm get-pip.py
-    
+
+# h5py needs to be installed after netCDF4 for compatibility
 RUN pip --no-cache-dir install \
         ipykernel \
         jupyter \
@@ -97,11 +98,11 @@ RUN pip --no-cache-dir install \
         pandas \
         bcolz \
         futures \
-        h5py==2.8.0rc1 \
         awscli \
-        h5netcdf \
         Cython \
-        netCDF4 \
+	netCDF4 \
+	h5netcdf \
+	h5py \
         scikit-image \
         keras \
         theano \
@@ -122,12 +123,12 @@ RUN pip3 --no-cache-dir install \
         pandas \
         bcolz \
         futures \
-        h5py==2.8.0rc1 \
         awscli \
-        h5netcdf \
-        Cython \
-        netCDF4 \
-        scikit-image \
+	Cython \
+	netCDF4 \
+	h5netcdf \
+	h5py \
+	scikit-image \
         keras \
         theano \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
@@ -135,6 +136,14 @@ RUN pip3 --no-cache-dir install \
         && \
     python3 -m ipykernel.kernelspec
 	
+# Fix gg-plot / pandas compatibility issue
+RUN cd /usr/local/lib/python3.6/dist-packages/ggplot/stats && \
+	sed -i 's/pandas.lib/pandas/g' smoothers.py
+	
+# Fix matplotlib to run headless
+RUN mkdir -p /root/.config/matplotlib && \
+    echo "backend : Agg" > /root/.config/matplotlib/matplotlibrc
+
 # Install GDAL 2.2
 RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/usr/include/gdal/" \
         GDAL==`gdal-config --version` \
