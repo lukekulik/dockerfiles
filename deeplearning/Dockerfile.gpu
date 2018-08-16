@@ -100,7 +100,7 @@ RUN pip --no-cache-dir install \
         futures \
         awscli \
         Cython \
-        netCDF4 \
+	netCDF4 \
 	h5netcdf \
 	h5py \
         scikit-image \
@@ -124,11 +124,11 @@ RUN pip3 --no-cache-dir install \
         bcolz \
         futures \
         awscli \
-        Cython \
-        netCDF4 \
+	Cython \
+	netCDF4 \
 	h5netcdf \
 	h5py \
-        scikit-image \
+	scikit-image \
         keras \
         theano \
         http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
