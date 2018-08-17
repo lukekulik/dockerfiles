@@ -137,8 +137,8 @@ RUN pip3 --no-cache-dir install \
     python3 -m ipykernel.kernelspec
 	
 # Fix gg-plot / pandas compatibility issue
-RUN cd /usr/local/lib/python3.6/dist-packages/ggplot/stats && \
-	sed -i 's/pandas.lib/pandas/g' smoothers.py
+#RUN cd /usr/local/lib/python3.6/dist-packages/ggplot/stats && \
+#	sed -i 's/pandas.lib/pandas/g' smoothers.py
 	
 # Fix matplotlib to run headless
 RUN mkdir -p /root/.config/matplotlib && \
