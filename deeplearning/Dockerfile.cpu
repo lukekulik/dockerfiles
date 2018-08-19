@@ -93,6 +93,7 @@ RUN pip --no-cache-dir install \
         jupyterlab \
         pillow-simd \
         matplotlib \
+	ggplot \
         numpy \
         scipy \
         sklearn \
@@ -118,6 +119,7 @@ RUN pip3 --no-cache-dir install \
         jupyterlab \
         pillow-simd \
         matplotlib \
+	ggplot \
         numpy \
         scipy \
         sklearn \
@@ -138,8 +140,8 @@ RUN pip3 --no-cache-dir install \
     python3 -m ipykernel.kernelspec
 	
 # Fix gg-plot / pandas compatibility issue
-#RUN cd /usr/local/lib/python3.6/dist-packages/ggplot/stats && \
-#	sed -i 's/pandas.lib/pandas/g' smoothers.py
+RUN cd /usr/local/lib/python3.6/dist-packages/ggplot/stats && \
+	sed -i 's/pandas.lib/pandas/g' smoothers.py
 	
 # Fix matplotlib to run headless
 RUN mkdir -p /root/.config/matplotlib && \
@@ -159,7 +161,7 @@ RUN git clone -b 3.4.1 --depth 1 https://github.com/opencv/opencv.git /root/open
 	mkdir build && \
 	cd build && \
 	cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DWITH_CUDA=OFF -DENABLE_FAST_MATH=1 \
-    	-DCUDA_FAST_MATH=0 -D WITH_CUBLAS=0 -DWITH_QT=OFF -DWITH_OPENGL=ON -DFORCE_VTK=OFF \
+    	-DCUDA_FAST_MATH=0 -D WITH_CUBLAS=0 -DWITH_QT=OFF -DWITH_OPENGL=OFF -DFORCE_VTK=OFF \
 	-DWITH_TBB=ON -DWITH_GDAL=ON -DWITH_XINE=OFF -DBUILD_EXAMPLES=OFF -DENABLE_PRECOMPILED_HEADERS=OFF .. && \
 	make -j"$(nproc)"  && \
 	make install && \
@@ -218,4 +220,3 @@ RUN git config --global credential.helper cache
 
 WORKDIR "/workspace"
 CMD sh /run_jupyter.sh && bash 
-
