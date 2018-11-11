@@ -129,18 +129,11 @@ RUN cd /tmp && \
  cd .. && \
  rm -rf *
 
-# Install scipy
-RUN cd /tmp && \
- git clone -b v1.1.0 --depth 1 https://github.com/scipy/scipy.git scipy && \
- cd scipy && \
- CFLAGS='-fopenmp -O3 -march=core2 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py build && \
- CFLAGS='-fopenmp -O3 -march=core2 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py install && \
- cd .. && \
- rm -rf *
 
 # h5py needs to be installed after netCDF4 for compatibility
 RUN pip --no-cache-dir install \
         ipykernel \
+	scipy \
         jupyter \
         jupyterlab \
         pillow-simd \
@@ -165,6 +158,7 @@ RUN pip --no-cache-dir install \
     
 RUN pip3 --no-cache-dir install \
         ipykernel \
+	scipy \
         jupyter \
         jupyterlab \
         pillow-simd \
