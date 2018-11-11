@@ -114,7 +114,7 @@ RUN pip3 install Cython
 # TODO: Add pythonpath?
 
 RUN cd /tmp && \
- git clone https://github.com/numpy/numpy.git numpy && \
+ git clone -b v1.15.4 --depth 1 https://github.com/numpy/numpy.git numpy && \
  cd numpy && \
  cp site.cfg.example site.cfg && \
  echo "\n[mkl]" >> site.cfg && \
