@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         wget \
         git \
+	man \
         watch \
         sshfs \
 	cpio \
@@ -103,6 +104,37 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 	python3 get-pip.py && \
 	python get-pip.py && \
 	rm get-pip.py
+	
+# Install numpy with MKL (for AMD CPU [not all optimizations added])
+RUN pip install Cython
+RUN pip3 install Cython
+
+
+# TODO: Add export LD_LIBRARY_PATH=/opt/intel/mkl/lib/intel64:${LD_LIBRARY_PATH} (ADD TO BASHRC)
+# TODO: Add pythonpath?
+
+RUN cd /tmp && \
+ git clone https://github.com/numpy/numpy.git numpy && \
+ cd numpy && \
+ cp site.cfg.example site.cfg && \
+ echo "\n[mkl]" >> site.cfg && \
+ echo "include_dirs = /opt/intel/mkl/include/intel64/" >> site.cfg && \
+ echo "library_dirs = /opt/intel/mkl/lib/intel64/" >> site.cfg && \
+ echo "mkl_libs = mkl_rt, mkl_def, mkl_intel_lp64, mkl_gnu_thread, mkl_core, mkl_mc3" >> site.cfg && \
+ echo "lapack_libs = mkl_def, mkl_intel_lp64, mkl_gnu_thread, mkl_core, mkl_mc3" >> site.cfg && \
+ CFLAGS='-fopenmp -O3 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py build --fcompiler=gnu95 && \
+ python3 setup.py install && \
+ cd .. && \
+ rm -rf *
+
+# Install scipy
+RUN cd /tmp && \
+ git clone https://github.com/scipy/scipy.git scipy && \
+ cd scipy && \
+ CFLAGS='-fopenmp -O3 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py build && \
+ python3 setup.py install && \
+ cd .. && \
+ rm -rf *
 
 # h5py needs to be installed after netCDF4 for compatibility
 RUN pip --no-cache-dir install \
@@ -112,14 +144,11 @@ RUN pip --no-cache-dir install \
         pillow-simd \
         matplotlib \
 	ggplot \
-        numpy \
-        scipy \
         sklearn \
         pandas \
         bcolz \
         futures \
         awscli \
-        Cython \
 	netCDF4 \
 	h5netcdf \
 	h5py \
@@ -139,14 +168,11 @@ RUN pip3 --no-cache-dir install \
         pillow-simd \
         matplotlib \
 	ggplot \
-        numpy \
-        scipy \
         sklearn \
         pandas \
         bcolz \
         futures \
         awscli \
-	Cython \
 	netCDF4 \
 	h5netcdf \
 	h5py \
