@@ -109,6 +109,12 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 RUN pip install Cython
 RUN pip3 install Cython
 
+# Fix locale (for Numpy installation)
+RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
+    apt-get clean && apt-get -y update && apt-get install -y locales && \
+    locale-gen en_US.UTF-8
 
 # TODO: Add export LD_LIBRARY_PATH=/opt/intel/mkl/lib/intel64:${LD_LIBRARY_PATH} (ADD TO BASHRC)
 # TODO: Add pythonpath?
