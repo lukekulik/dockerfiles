@@ -131,7 +131,7 @@ RUN cd /tmp && \
 
 # Install scipy
 RUN cd /tmp && \
- git clone https://github.com/scipy/scipy.git scipy && \
+ git clone -b v1.1.0 --depth 1 https://github.com/scipy/scipy.git scipy && \
  cd scipy && \
  CFLAGS='-fopenmp -O3 -march=core2 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py build && \
  CFLAGS='-fopenmp -O3 -march=core2 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py install && \
