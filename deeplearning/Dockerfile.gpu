@@ -105,31 +105,27 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 	python get-pip.py && \
 	rm get-pip.py
 	
-# Install numpy with MKL (for AMD CPU [not all optimizations added])
+# Install numpy with MKL (for Intel CPU)
 RUN pip install Cython
 RUN pip3 install Cython
 
-# Fix locale (for Numpy installation)
+# Fix locale
 RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
     echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
     apt-get clean && apt-get -y update && apt-get install -y locales && \
-    locale-gen en_US.UTF-8
-
-# TODO: Add export LD_LIBRARY_PATH=/opt/intel/mkl/lib/intel64:${LD_LIBRARY_PATH} (ADD TO BASHRC)
-# TODO: Add pythonpath?
 
 RUN cd /tmp && \
  git clone -b v1.15.4 --depth 1 https://github.com/numpy/numpy.git numpy && \
  cd numpy && \
- cp site.cfg.example site.cfg && \
- echo "\n[mkl]" >> site.cfg && \
+ touch site.cfg && \
+ echo "[mkl]" >> site.cfg && \
  echo "include_dirs = /opt/intel/mkl/include/intel64/" >> site.cfg && \
  echo "library_dirs = /opt/intel/mkl/lib/intel64/" >> site.cfg && \
  echo "mkl_libs = mkl_rt, mkl_def, mkl_intel_lp64, mkl_gnu_thread, mkl_core, mkl_mc3" >> site.cfg && \
  echo "lapack_libs = mkl_def, mkl_intel_lp64, mkl_gnu_thread, mkl_core, mkl_mc3" >> site.cfg && \
- CFLAGS='-fopenmp -O3 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py build --fcompiler=gnu95 && \
- python3 setup.py install && \
+ CFLAGS='-fopenmp -O3 -march=core2 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py build --fcompiler=gnu95 && \
+ CFLAGS='-fopenmp -O3 -march=core2 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py install && \
  cd .. && \
  rm -rf *
 
@@ -137,8 +133,8 @@ RUN cd /tmp && \
 RUN cd /tmp && \
  git clone https://github.com/scipy/scipy.git scipy && \
  cd scipy && \
- CFLAGS='-fopenmp -O3 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py build && \
- python3 setup.py install && \
+ CFLAGS='-fopenmp -O3 -march=core2 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py build && \
+ CFLAGS='-fopenmp -O3 -march=core2 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py install && \
  cd .. && \
  rm -rf *
 
@@ -214,7 +210,8 @@ RUN git clone -b 3.4.1 --depth 1 https://github.com/opencv/opencv.git /root/open
 	cd build && \
 	cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DWITH_CUDA=ON -DENABLE_FAST_MATH=1 \
     	-DCUDA_FAST_MATH=1 -D WITH_CUBLAS=1 -DWITH_QT=OFF -DWITH_OPENGL=ON -DFORCE_VTK=OFF \
-	-DWITH_TBB=ON -DWITH_GDAL=ON -DWITH_XINE=OFF -DBUILD_EXAMPLES=OFF -DCUDA_ARCH_PTX="" -DCUDA_ARCH_BIN="6.1" .. && \
+	-DWITH_TBB=ON -DWITH_MKL=ON -DMKL_USE_MULTITHREAD=ON -DMKL_WITH_TBB=ON -DWITH_IPP=ON -DWITH_GDAL=ON \
+	-DWITH_XINE=OFF -DBUILD_EXAMPLES=OFF -DCUDA_ARCH_PTX="" -DCUDA_ARCH_BIN="6.1" .. && \
 	make -j"$(nproc)"  && \
 	make install && \
 	ldconfig && \
