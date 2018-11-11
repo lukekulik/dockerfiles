@@ -113,7 +113,7 @@ RUN pip3 install Cython
 RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
     echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
-    apt-get clean && apt-get -y update && apt-get install -y locales && \
+    apt-get clean && apt-get -y update && apt-get install -y locales
 
 RUN cd /tmp && \
  git clone -b v1.15.4 --depth 1 https://github.com/numpy/numpy.git numpy && \
