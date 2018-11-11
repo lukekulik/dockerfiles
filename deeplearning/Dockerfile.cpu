@@ -25,11 +25,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         wget \
         git \
+	man \
         watch \
         sshfs \
+	cpio \
 # "Compilers"
         cmake \
         gfortran\
+	gcc \
         g++ \
         python \
         python-dev \
@@ -73,35 +76,74 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean && \
     apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
+    
+# Install MKL
+RUN cd /tmp && \
+  wget -q http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/12414/l_mkl_2018.1.163.tgz && \
+  tar -xzf l_mkl_2018.1.163.tgz && \
+  cd l_mkl_2018.1.163 && \
+  sed -i 's/ACCEPT_EULA=decline/ACCEPT_EULA=accept/g' silent.cfg && \
+  sed -i 's/ARCH_SELECTED=ALL/ARCH_SELECTED=INTEL64/g' silent.cfg && \
+  sed -i 's/COMPONENTS=DEFAULTS/COMPONENTS=;intel-comp-l-all-vars__noarch;intel-comp-nomcu-vars__noarch;intel-openmp__x86_64;intel-tbb-libs__x86_64;intel-mkl-common__noarch;intel-mkl-installer-license__noarch;intel-mkl-core__x86_64;intel-mkl-core-rt__x86_64;intel-mkl-doc__noarch;intel-mkl-doc-ps__noarch;intel-mkl-gnu__x86_64;intel-mkl-gnu-rt__x86_64;intel-mkl-common-ps__noarch;intel-mkl-core-ps__x86_64;intel-mkl-common-c__noarch;intel-mkl-core-c__x86_64;intel-mkl-common-c-ps__noarch;intel-mkl-tbb__x86_64;intel-mkl-tbb-rt__x86_64;intel-mkl-gnu-c__x86_64;intel-mkl-common-f__noarch;intel-mkl-core-f__x86_64;intel-mkl-gnu-f-rt__x86_64;intel-mkl-gnu-f__x86_64;intel-mkl-f95-common__noarch;intel-mkl-f__x86_64;intel-mkl-psxe__noarch;intel-psxe-common__noarch;intel-psxe-common-doc__noarch;intel-compxe-pset/g' silent.cfg && \
+  ./install.sh -s silent.cfg && \
+  cd .. && rm -rf * && \
+  rm -rf /opt/intel/.*.log /opt/intel/compilers_and_libraries_2018.1.163/licensing && \
+  echo "/opt/intel/mkl/lib/intel64" >> /etc/ld.so.conf.d/intel.conf && \
+  ldconfig && \
+  echo "source /opt/intel/mkl/bin/mklvars.sh intel64" >> /etc/bash.bashrc
 
 # Link BLAS library to use OpenBLAS using the alternatives mechanism (https://www.scipy.org/scipylib/building/linux.html#debian-ubuntu)
 RUN update-alternatives --set libblas.so.3 /usr/lib/openblas-base/libblas.so.3 
     
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1 # ?
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2 # ?
+# Select default Python 3 (Higher priority to Python 3.6)
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2 
 RUN update-alternatives --config python3
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 	python3 get-pip.py && \
 	python get-pip.py && \
 	rm get-pip.py
+	
+# Install numpy with MKL (for Intel CPU)
+RUN pip install Cython
+RUN pip3 install Cython
+
+# Fix locale
+RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "LANG=en_US.UTF-8" > /etc/locale.conf && \
+    apt-get clean && apt-get -y update && apt-get install -y locales
+
+RUN cd /tmp && \
+ git clone -b v1.15.4 --depth 1 https://github.com/numpy/numpy.git numpy && \
+ cd numpy && \
+ touch site.cfg && \
+ echo "[mkl]" >> site.cfg && \
+ echo "include_dirs = /opt/intel/mkl/include/intel64/" >> site.cfg && \
+ echo "library_dirs = /opt/intel/mkl/lib/intel64/" >> site.cfg && \
+ echo "mkl_libs = mkl_rt, mkl_def, mkl_intel_lp64, mkl_gnu_thread, mkl_core, mkl_mc3" >> site.cfg && \
+ echo "lapack_libs = mkl_def, mkl_intel_lp64, mkl_gnu_thread, mkl_core, mkl_mc3" >> site.cfg && \
+ CFLAGS='-fopenmp -O3 -march=core2 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py build --fcompiler=gnu95 && \
+ CFLAGS='-fopenmp -O3 -march=core2 -ftree-vectorize' LDFLAGS='-lm -lpthread -lgomp' python3 setup.py install && \
+ cd .. && \
+ rm -rf *
+
 
 # h5py needs to be installed after netCDF4 for compatibility
 RUN pip --no-cache-dir install \
         ipykernel \
+	scipy \
         jupyter \
         jupyterlab \
         pillow-simd \
         matplotlib \
 	ggplot \
-        numpy \
-        scipy \
         sklearn \
         pandas \
         bcolz \
         futures \
         awscli \
-        Cython \
 	netCDF4 \
 	h5netcdf \
 	h5py \
@@ -116,19 +158,17 @@ RUN pip --no-cache-dir install \
     
 RUN pip3 --no-cache-dir install \
         ipykernel \
+	scipy \
         jupyter \
         jupyterlab \
         pillow-simd \
         matplotlib \
 	ggplot \
-        numpy \
-        scipy \
         sklearn \
         pandas \
         bcolz \
         futures \
         awscli \
-	Cython \
 	netCDF4 \
 	h5netcdf \
 	h5py \
@@ -164,7 +204,8 @@ RUN git clone -b 3.4.1 --depth 1 https://github.com/opencv/opencv.git /root/open
 	cd build && \
 	cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DWITH_CUDA=OFF -DENABLE_FAST_MATH=1 \
     	-DCUDA_FAST_MATH=0 -D WITH_CUBLAS=0 -DWITH_QT=OFF -DWITH_OPENGL=OFF -DFORCE_VTK=OFF \
-	-DWITH_TBB=ON -DWITH_GDAL=ON -DWITH_XINE=OFF -DBUILD_EXAMPLES=OFF -DENABLE_PRECOMPILED_HEADERS=OFF .. && \
+	-DWITH_TBB=ON -DWITH_MKL=ON -DMKL_USE_MULTITHREAD=ON -DMKL_WITH_TBB=ON -DWITH_IPP=ON -DWITH_GDAL=ON \
+	-DWITH_XINE=OFF -DBUILD_EXAMPLES=OFF -DENABLE_PRECOMPILED_HEADERS=OFF .. && \
 	make -j"$(nproc)"  && \
 	make install && \
 	ldconfig && \
