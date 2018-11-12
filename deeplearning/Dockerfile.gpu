@@ -260,7 +260,9 @@ RUN echo "Generating self-signed certificate" && \
 	# Generating certificate signing request
 	openssl req -new -key key.pem -out cert.csr -subj "/C=GB/ST=GB/L=London/O=UK Trade & Investment/OU=Digital/CN=default" && \
 	# Generating self-signed certificate
-	openssl x509 -req -days 3650 -in cert.csr -signkey key.pem -out cert.pem 
+	openssl x509 -req -days 3650 -in cert.csr -signkey key.pem -out cert.pem  && \
+	# Fix screen autocompletion
+	echo "defshell -bash" > ~/.screenrc
     
 COPY jupyter_notebook_config.py /root/.jupyter/
 
