@@ -150,8 +150,8 @@ RUN pip --no-cache-dir install \
         scikit-image \
         keras \
         theano \
-        http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
-        seashells \
+        https://github.com/matplotlib/basemap/archive/v1.2.0rel.zip \
+	seashells \
 	tqdm \
         && \
     python -m ipykernel.kernelspec
@@ -175,8 +175,8 @@ RUN pip3 --no-cache-dir install \
 	scikit-image \
         keras \
         theano \
-        http://github.com/matplotlib/basemap/archive/v1.1.0.zip \
-        seashells \
+        https://github.com/matplotlib/basemap/archive/v1.2.0rel.zip \
+	seashells \
 	tqdm \
         && \
     python3 -m ipykernel.kernelspec
