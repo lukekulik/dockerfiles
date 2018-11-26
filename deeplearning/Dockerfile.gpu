@@ -153,6 +153,7 @@ RUN pip --no-cache-dir install \
         https://github.com/matplotlib/basemap/archive/v1.2.0rel.zip \
         seashells \
 	tqdm \
+	imageio\
         && \
     python -m ipykernel.kernelspec
     
@@ -178,6 +179,7 @@ RUN pip3 --no-cache-dir install \
         https://github.com/matplotlib/basemap/archive/v1.2.0rel.zip \
 	seashells \
 	tqdm \
+	imageio \
         && \
     python3 -m ipykernel.kernelspec
 	
