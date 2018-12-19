@@ -58,7 +58,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	libjpeg-turbo8-dev \ 
         libtiff5-dev \
 	libopenexr-dev \
-        libjasper-dev \
 	libgdal-dev \ 
         libpng-dev \
 	libnetcdf-dev \
