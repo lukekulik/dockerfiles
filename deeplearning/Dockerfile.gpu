@@ -36,8 +36,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         g++ \
         python \
         python-dev \
-        python3.7 \
-        python3.7-dev \
+     #   python3.7 \ - blocked by pyproj
+    #    python3.7-dev \
 # Linear Algebra accelerators 
         libopenblas-dev \
         liblapacke-dev \
@@ -95,9 +95,9 @@ RUN cd /tmp && \
 #RUN update-alternatives --set libblas.so.3 /usr/lib/openblas-base/libblas.so.3 
     
 # Select default Python 3 (Higher priority to Python 3.6)
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2 
-RUN update-alternatives --config python3
+#RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1
+#RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2 
+#RUN update-alternatives --config python3
 
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 	python3 get-pip.py && \
@@ -149,7 +149,6 @@ RUN pip --no-cache-dir install \
         scikit-image \
         keras \
         theano \
-	https://github.com/jswhit/pyproj/archive/v1.9.5.1rel.zip \
         https://github.com/matplotlib/basemap/archive/v1.2.0rel.zip \
         seashells \
 	tqdm \
@@ -176,7 +175,6 @@ RUN pip3 --no-cache-dir install \
 	scikit-image \
         keras \
         theano \
-	https://github.com/jswhit/pyproj/archive/v1.9.5.1rel.zip \
         https://github.com/matplotlib/basemap/archive/v1.2.0rel.zip \
 	seashells \
 	tqdm \
