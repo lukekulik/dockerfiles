@@ -60,7 +60,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	libopenexr-dev \
         libjasper-dev \
 	libgdal-dev \ 
-        libpng12-dev \
+        libpng-dev \
 	libnetcdf-dev \
         libhdf5-dev \	
 # Media processing
