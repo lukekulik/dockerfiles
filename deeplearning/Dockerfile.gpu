@@ -36,6 +36,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         g++ \
         python \
         python-dev \
+	python3.6 \
+	python3.6-dev \
      #   python3.7 \ - blocked by pyproj
     #    python3.7-dev \
 # Linear Algebra accelerators 
