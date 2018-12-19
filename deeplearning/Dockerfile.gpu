@@ -149,6 +149,7 @@ RUN pip --no-cache-dir install \
         scikit-image \
         keras \
         theano \
+	https://github.com/jswhit/pyproj/archive/v1.9.5.1rel.zip \
         https://github.com/matplotlib/basemap/archive/v1.2.0rel.zip \
         seashells \
 	tqdm \
@@ -175,6 +176,7 @@ RUN pip3 --no-cache-dir install \
 	scikit-image \
         keras \
         theano \
+	https://github.com/jswhit/pyproj/archive/v1.9.5.1rel.zip \
         https://github.com/matplotlib/basemap/archive/v1.2.0rel.zip \
 	seashells \
 	tqdm \
