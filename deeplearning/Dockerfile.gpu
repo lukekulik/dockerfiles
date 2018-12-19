@@ -70,7 +70,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libzmq3-dev \	
         && \
 # Fix OpenBLAS packaging bug for OpenCV (https://github.com/opencv/opencv/issues/9953)
-    cp /usr/include/lapacke*.h /usr/include/openblas && \
+#    cp /usr/include/lapacke*.h /usr/include/openblas && \
 # Clean-up
     apt-get clean && \
     apt-get autoremove && \
