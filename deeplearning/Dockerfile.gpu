@@ -216,14 +216,14 @@ RUN git clone -b 3.4.1 --depth 1 https://github.com/opencv/opencv.git /root/open
 	rm -rf /root/opencv
 		
 RUN pip --no-cache-dir install \
-	https://download.pytorch.org/whl/cu100/torch-1.0.0-cp36-cp36m-linux_x86_64.whl  \
+	https://download.pytorch.org/whl/cu100/torch-1.0.0-cp27-cp27mu-linux_x86_64.whl  \
         torchvision \
 # Tensorflow GPU not currently available due to CUDA9.1 incompatibility
         tensorflow==1.5.0 \
         tensorboardX
 
 RUN pip3 --no-cache-dir install \
-	https://download.pytorch.org/whl/cu100/torch-1.0.0-cp27-cp27mu-linux_x86_64.whl \
+	https://download.pytorch.org/whl/cu100/torch-1.0.0-cp36-cp36m-linux_x86_64.whl \
         torchvision \
 # Tensorflow GPU not currently available due to CUDA9.1 incompatibility
         tensorflow==1.5.0 \
