@@ -256,7 +256,7 @@ RUN echo "Generating self-signed certificate" && \
 	mkdir -p /etc/ssl && \
 	cd /etc/ssl && \
 	# Generating signing SSL private key
-	openssl genrsa -des3 -passout pass:x -out key.pem 2048 && \
+	openssl genrsa -passout pass:x -out key.pem 2048 && \
 	# Removing passphrase from private key
 	cp key.pem key.pem.orig && \
 	openssl rsa -passin pass:x -in key.pem.orig -out key.pem && \
