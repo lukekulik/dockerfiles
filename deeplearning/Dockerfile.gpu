@@ -81,7 +81,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     
 # Install MKL
 RUN cd /tmp && \
-  wget -q http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15275/l_mkl_2019.3.199.tgz && \
+  wget http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15275/l_mkl_2019.3.199.tgz && \
   tar -xzf l_mkl_2019.3.199.tgz && \
   cd l_mkl_2019.3.199 && \
   sed -i 's/ACCEPT_EULA=decline/ACCEPT_EULA=accept/g' silent.cfg && \
