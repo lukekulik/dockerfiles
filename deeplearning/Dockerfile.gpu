@@ -118,7 +118,7 @@ RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment && \
     apt-get clean && apt-get -y update && apt-get install -y locales
 
 RUN cd /tmp && \
- git clone -b v1.15.4 --depth 1 https://github.com/numpy/numpy.git numpy && \
+ git clone -b v1.16.4 --depth 1 https://github.com/numpy/numpy.git numpy && \
  cd numpy && \
  touch site.cfg && \
  echo "[mkl]" >> site.cfg && \
@@ -156,6 +156,8 @@ RUN pip --no-cache-dir install \
         seashells \
 	tqdm \
 	imageio\
+	cartopy \
+	regionmask \
         && \
     python -m ipykernel.kernelspec
     
@@ -182,6 +184,8 @@ RUN pip3 --no-cache-dir install \
 	seashells \
 	tqdm \
 	imageio \
+	cartopy \
+	regionmask \
         && \
     python3 -m ipykernel.kernelspec
 	
