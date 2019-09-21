@@ -203,20 +203,8 @@ RUN pip3 --no-cache-dir install --global-option=build_ext --global-option="-I/us
         && \
     python3 -m ipykernel.kernelspec
     
-# Install Boost
-RUN cd /tmp && \
- wget http://downloads.sourceforge.net/project/boost/boost/1.59.0/boost_1_59_0.tar.bz2 && \
- tar xvf boost_1_59_0.tar.bz2 && rm -rf boost_1_59_0.tar.bz2 && \ 
- cd boost_1_59_0 && \
- ./bootstrap.sh --with-python=python3.6 \
- ./b2 install cxxflags="-I/usr/include/python3.6m"
  
-# Install NumpyBoost
-RUN cd /tmp && \
-git clone https://github.com/ndarray/Boost.NumPy.git && \
-cd Boost.NumPy && mkdir build && cd build && \
-cmake -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.6m.so -DPYTHON_EXECUTABLE=/usr/bin/python3 ../ && \
-make install
+
 
 ############## GPU specific ###############
 
