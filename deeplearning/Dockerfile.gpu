@@ -143,7 +143,6 @@ RUN pip --no-cache-dir install \
 	ggplot \
         sklearn \
         pandas \
-        bcolz \
         futures \
         awscli \
 	netCDF4 \
