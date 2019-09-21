@@ -157,7 +157,6 @@ RUN pip --no-cache-dir install \
 	imageio\
 	cartopy \
 	regionmask \
-	libtiff \
         && \
     python -m ipykernel.kernelspec
     
